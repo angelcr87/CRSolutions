@@ -1,12 +1,16 @@
-using CRSolutions.Models;
+using CRSolutions.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<CRSolutionsDBContext>(opciones => opciones.UseSqlServer(builder.Configuration.GetConnectionString("CRSolutionsDBContext")));
+var connectionString = builder.Configuration.GetConnectionString("CRSolutionsDBContext");
+builder.Services.AddDbContext<CRSolutionsDBContext>(options =>
+    options.UseSqlServer(connectionString));
+//builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+
+builder.Services.AddControllersWithViews();
 var app = builder.Build();
 
 //using (var scope = app.Services.CreateScope())

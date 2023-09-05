@@ -17,6 +17,6 @@ namespace CRSolutions.Models
         [StringLength(500)]
         public string Description { get; set; }
         public bool Status { get; set; }
-        public virtual ICollection<User> Users { get; } = new List<User>(); // Collection navigation containing dependents
+        public  ICollection<User> Users { get; } = new List<User>(); // Collection navigation containing dependents
     }
 }

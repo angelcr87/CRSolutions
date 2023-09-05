@@ -14,13 +14,13 @@ namespace CRSolutions.Models
         [StringLength(300)]
         public string FullName { get; set; }
 
-        [Required]
-        [Display(Name = "Empresa")]
-        public Guid IdCompany { get; set; }
+        //[Required]
+        //[Display(Name = "Empresa")]
+        //public Guid IdCompany { get; set; }
 
-        [Required]
-        [Display(Name = "Solicitante")]
-        public Guid? IdUser { get; set; }
+        //[Required]
+        //[Display(Name = "Solicitante")]
+        //public Guid? IdUser { get; set; }
 
         [Required]
         [Display(Name = "Posicion Evualuada")]
@@ -51,6 +51,7 @@ namespace CRSolutions.Models
         [Column(TypeName = "VARCHAR(600)")]
         [StringLength(600)]
         public string PhotoFile { get; set; }
+
         [Required]
         public int IdTypeTest { get; set; }
 
@@ -62,9 +63,15 @@ namespace CRSolutions.Models
 
         public bool Status { get; set; }
 
-        public User? User { get; set; } = null!;
+        [Display(Name = "Solicitante")]
+        public Guid? IdUser { get; set; }
 
-        public Company Company { get; set; } = null!;
+        [Display(Name = "Empresa")]
+        public Guid IdCompany { get; set; }      
+
+        public User? User { get; set; } = null!;
+        public Company? Company { get; set; } = null!;  
+
 
     }
 }

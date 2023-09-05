@@ -33,8 +33,8 @@ namespace CRSolutions.Models
 
         public bool Status { get; set;}
 
-        public virtual ICollection<User> Users { get; } = new List<User>(); // Collection navigation containing dependents
+        public  ICollection<User> Users { get; } = new List<User>(); // Collection navigation containing dependents
 
-        public virtual ICollection<Candidate> Candidates { get; } = new List<Candidate>();
+        public  ICollection<Candidate> Candidates { get; } = new List<Candidate>();
     }
 }

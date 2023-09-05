@@ -34,7 +34,7 @@ namespace CRSolutions.Models
         public Role Role { get; set; } = null!;
         public Company Company { get; set; } = null!;
 
-        public virtual ICollection<Candidate> Candidates { get; } = new List<Candidate>(); // Collection navigation containing dependents
+        public ICollection<Candidate> Candidates { get; } = new List<Candidate>(); // Collection navigation containing dependents
 
     }
 }

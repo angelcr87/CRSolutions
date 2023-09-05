@@ -1,0 +1,107 @@
+﻿@model IEnumerable<CRSolutions.Models.Candidate>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EvaluatedPosition)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdRiskScore)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EvaluationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReportFile)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AudioFile)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhotoFile)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdTypeTest)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RecordEvaluation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BlackList)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Company)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EvaluatedPosition)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdRiskScore)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EvaluationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReportFile)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AudioFile)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhotoFile)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdTypeTest)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RecordEvaluation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BlackList)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Company.CompanyName)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdCantidate">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.IdCantidate">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdCantidate">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
