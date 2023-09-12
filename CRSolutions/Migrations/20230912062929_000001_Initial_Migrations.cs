@@ -75,12 +75,13 @@ namespace CRSolutions.Migrations
                 {
                     IdCantidate = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FullName = table.Column<string>(type: "VARCHAR(300)", maxLength: 300, nullable: false),
+                    CURP = table.Column<string>(type: "VARCHAR(300)", maxLength: 300, nullable: false),
                     EvaluatedPosition = table.Column<string>(type: "VARCHAR(300)", maxLength: 300, nullable: false),
                     IdRiskScore = table.Column<int>(type: "int", nullable: false),
                     EvaluationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ReportFile = table.Column<string>(type: "VARCHAR(600)", maxLength: 600, nullable: false),
-                    AudioFile = table.Column<string>(type: "VARCHAR(600)", maxLength: 600, nullable: false),
-                    PhotoFile = table.Column<string>(type: "VARCHAR(600)", maxLength: 600, nullable: false),
+                    ReportFile = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    AudioFile = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    CreditFile = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     IdTypeTest = table.Column<int>(type: "int", nullable: false),
                     RecordEvaluation = table.Column<string>(type: "VARCHAR(300)", maxLength: 300, nullable: false),
                     BlackList = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -103,6 +104,36 @@ namespace CRSolutions.Migrations
                         principalTable: "Users",
                         principalColumn: "IdUser");
                 });
+
+            migrationBuilder.InsertData(
+                table: "Companies",
+                columns: new[] { "IdCompany", "BusinessName", "CompanyDescription", "CompanyName", "Credits", "RFC", "Status" },
+                values: new object[] { new Guid("127cfef3-3e5d-4b47-b58d-19adb61cf6be"), "razon Social", "Compania Inicial", "CRSolutions", true, "RFC", true });
+
+            migrationBuilder.InsertData(
+                table: "Roles",
+                columns: new[] { "IdRol", "Description", "RoleName", "Status" },
+                values: new object[,]
+                {
+                    { new Guid("4a74da66-bcd1-4662-8625-cb7c3bf2a837"), "Puede crear nuevos candidatos", "Admin", true },
+                    { new Guid("789a3411-ed70-42bd-9681-b0d9ae800583"), "Puede todos los candidatos", "Cliente Admin", true },
+                    { new Guid("882e1047-29e1-4276-8bce-6f2372670ae1"), "puede ver unicamente sus candidatos", "Cliente", true }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "IdUser", "FullName", "IdCompany", "IdRol", "Password", "Status", "UserName" },
+                values: new object[] { new Guid("15fe19da-3dec-4d15-9a63-74bed4a038d3"), "Cliente", new Guid("127cfef3-3e5d-4b47-b58d-19adb61cf6be"), new Guid("882e1047-29e1-4276-8bce-6f2372670ae1"), "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", true, "Cliente" });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "IdUser", "FullName", "IdCompany", "IdRol", "Password", "Status", "UserName" },
+                values: new object[] { new Guid("5a689fe8-5bc5-481f-a1ca-399562d6da2c"), "Administrador", new Guid("127cfef3-3e5d-4b47-b58d-19adb61cf6be"), new Guid("4a74da66-bcd1-4662-8625-cb7c3bf2a837"), "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", true, "Admin" });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "IdUser", "FullName", "IdCompany", "IdRol", "Password", "Status", "UserName" },
+                values: new object[] { new Guid("85535ac0-2b9c-4f52-994c-2af88799d605"), "Cliente Administrador", new Guid("127cfef3-3e5d-4b47-b58d-19adb61cf6be"), new Guid("789a3411-ed70-42bd-9681-b0d9ae800583"), "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5", true, "Cliente_Admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Candidates_IdCompany",

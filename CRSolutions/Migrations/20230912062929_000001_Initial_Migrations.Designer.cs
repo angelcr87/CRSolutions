@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CRSolutions.Migrations
 {
     [DbContext(typeof(CRSolutionsDBContext))]
-    [Migration("20230909212051_000002_Modified_filed_CreditFile")]
-    partial class _000002_Modified_filed_CreditFile
+    [Migration("20230912062929_000001_Initial_Migrations")]
+    partial class _000001_Initial_Migrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,10 +30,8 @@ namespace CRSolutions.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("AudioFile")
-                        .IsRequired()
-                        .HasMaxLength(600)
-                        .HasColumnType("VARCHAR(600)");
+                    b.Property<byte[]>("AudioFile")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("BlackList")
                         .IsRequired()
@@ -44,10 +42,8 @@ namespace CRSolutions.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("VARCHAR(300)");
 
-                    b.Property<string>("CreditFile")
-                        .IsRequired()
-                        .HasMaxLength(600)
-                        .HasColumnType("VARCHAR(600)");
+                    b.Property<byte[]>("CreditFile")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("EvaluatedPosition")
                         .IsRequired()
@@ -79,10 +75,8 @@ namespace CRSolutions.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("VARCHAR(300)");
 
-                    b.Property<string>("ReportFile")
-                        .IsRequired()
-                        .HasMaxLength(600)
-                        .HasColumnType("VARCHAR(600)");
+                    b.Property<byte[]>("ReportFile")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
@@ -131,6 +125,18 @@ namespace CRSolutions.Migrations
                     b.HasKey("IdCompany");
 
                     b.ToTable("Companies");
+
+                    b.HasData(
+                        new
+                        {
+                            IdCompany = new Guid("127cfef3-3e5d-4b47-b58d-19adb61cf6be"),
+                            BusinessName = "razon Social",
+                            CompanyDescription = "Compania Inicial",
+                            CompanyName = "CRSolutions",
+                            Credits = true,
+                            RFC = "RFC",
+                            Status = true
+                        });
                 });
 
             modelBuilder.Entity("CRSolutions.Models.Role", b =>
@@ -155,6 +161,29 @@ namespace CRSolutions.Migrations
                     b.HasKey("IdRol");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            IdRol = new Guid("4a74da66-bcd1-4662-8625-cb7c3bf2a837"),
+                            Description = "Puede crear nuevos candidatos",
+                            RoleName = "Admin",
+                            Status = true
+                        },
+                        new
+                        {
+                            IdRol = new Guid("789a3411-ed70-42bd-9681-b0d9ae800583"),
+                            Description = "Puede todos los candidatos",
+                            RoleName = "Cliente Admin",
+                            Status = true
+                        },
+                        new
+                        {
+                            IdRol = new Guid("882e1047-29e1-4276-8bce-6f2372670ae1"),
+                            Description = "puede ver unicamente sus candidatos",
+                            RoleName = "Cliente",
+                            Status = true
+                        });
                 });
 
             modelBuilder.Entity("CRSolutions.Models.User", b =>
@@ -194,6 +223,38 @@ namespace CRSolutions.Migrations
                     b.HasIndex("IdRol");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            IdUser = new Guid("5a689fe8-5bc5-481f-a1ca-399562d6da2c"),
+                            FullName = "Administrador",
+                            IdCompany = new Guid("127cfef3-3e5d-4b47-b58d-19adb61cf6be"),
+                            IdRol = new Guid("4a74da66-bcd1-4662-8625-cb7c3bf2a837"),
+                            Password = "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5",
+                            Status = true,
+                            UserName = "Admin"
+                        },
+                        new
+                        {
+                            IdUser = new Guid("85535ac0-2b9c-4f52-994c-2af88799d605"),
+                            FullName = "Cliente Administrador",
+                            IdCompany = new Guid("127cfef3-3e5d-4b47-b58d-19adb61cf6be"),
+                            IdRol = new Guid("789a3411-ed70-42bd-9681-b0d9ae800583"),
+                            Password = "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5",
+                            Status = true,
+                            UserName = "Cliente_Admin"
+                        },
+                        new
+                        {
+                            IdUser = new Guid("15fe19da-3dec-4d15-9a63-74bed4a038d3"),
+                            FullName = "Cliente",
+                            IdCompany = new Guid("127cfef3-3e5d-4b47-b58d-19adb61cf6be"),
+                            IdRol = new Guid("882e1047-29e1-4276-8bce-6f2372670ae1"),
+                            Password = "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5",
+                            Status = true,
+                            UserName = "Cliente"
+                        });
                 });
 
             modelBuilder.Entity("CRSolutions.Models.Candidate", b =>

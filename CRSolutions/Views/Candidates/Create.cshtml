@@ -99,7 +99,10 @@
                                     <input type="file" name="src-file2" aria-label="Archivo" />
                                 </div> *@
                                 <label asp-for="ReportFile" class="form-label"></label>
-                                <input asp-for="ReportFile" class="form-control" />
+                                @* <input asp-for="ReportFile" class="form-control" /> *@
+                                <div class="reporte" id="src-file2">
+                                    <input asp-for="ReportFile" type="file" class="form-control" />
+                                </div>
                                 <span asp-validation-for="ReportFile" class="text-danger"></span>
                             </div>
                         </div>
@@ -110,7 +113,10 @@
                                     <input type="file" name="src-file3" aria-label="Archivo" />
                                 </div> *@
                                 <label asp-for="AudioFile" class="form-label"></label>
-                                <input asp-for="AudioFile" class="form-control" />
+                                @* <input asp-for="AudioFile" class="form-control" /> *@
+                                <div class="reporte" id="src-file2">
+                                    <input asp-for="AudioFile"  type="file" class="form-control" />
+                                </div>
                                 <span asp-validation-for="AudioFile" class="text-danger"></span>
                             </div>
                         </div>
@@ -121,7 +127,10 @@
                                     <input type="file" name="src-file4" aria-label="Archivo" />
                                 </div> *@
                                 <label asp-for="CreditFile" class="form-label"></label>
-                                <input asp-for="CreditFile" class="form-control" />
+                                @* <input asp-for="CreditFile" class="form-control" /> *@
+                                <div class="reporte" id="src-file2">
+                                    <input asp-for="CreditFile" type="file" class="form-control" />
+                                </div>
                                 <span asp-validation-for="CreditFile" class="text-danger"></span>
                             </div>
                         </div>
@@ -133,25 +142,25 @@
                             <div class="mb-3">
                                 <!-- <label for="exampleFormControlInput4" class="form-label">Score de Riesgo</label> -->
                                 <!-- <input type="text" class="form-control" id="exampleFormControlInput4" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"> -->
-                                <input asp-for="IdTypeTest" type="radio" class="test" id="preeempleo" name="tipo_test" value="HTML" />
+                                <input asp-for="IdTypeTest" type="radio" class="test" id="preeempleo" name="tipo_test" value="1" />
                                 <label for="preeempleo">Preempleo</label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <input asp-for="IdTypeTest" type="radio" class="test" id="periodico" name="tipo_test" value="Periodico" />
+                                <input asp-for="IdTypeTest" type="radio" class="test" id="periodico" name="tipo_test" value="2" />
                                 <label for="periodico">Periodico</label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <input asp-for="IdTypeTest" type="radio" class="test" id="patrimonial" name="tipo_test" value="Patrimonial" />
+                                <input asp-for="IdTypeTest" type="radio" class="test" id="patrimonial" name="tipo_test" value="3" />
                                 <label for="patrimonial">Patrimonial</label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <input asp-for="IdTypeTest" type="radio" class="test" id="investigacion" name="tipo_test" value="Investigacion" />
+                                <input asp-for="IdTypeTest" type="radio" class="test" id="investigacion" name="tipo_test" value="4" />
                                 <label for="investigacion">Investigacion</label>
                             </div>
                         </div>

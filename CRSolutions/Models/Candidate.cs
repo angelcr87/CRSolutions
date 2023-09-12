@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CRSolutions.Models
 {
@@ -14,7 +15,7 @@ namespace CRSolutions.Models
         [StringLength(300)]
         public string FullName { get; set; }
 
-        [Required] 
+        [Required]
         [Column(TypeName = "VARCHAR(300)")]
         [StringLength(300)]
         public string CURP { get; set; }
@@ -39,23 +40,23 @@ namespace CRSolutions.Models
         [Display(Name = "Fecha Evualuacion")]
         public DateTime EvaluationDate { get; set; }
 
-        [Required]
+        
         [Display(Name = "Reporte")]
-        [Column(TypeName = "VARCHAR(600)")]
-        [StringLength(600)]
-        public string ReportFile { get; set; }
+        //[Column(TypeName = "VARCHAR(600)")]
+        //[StringLength(600)]
+        public byte[]? ReportFile { get; set; }
 
-        [Required]
+       
         [Display(Name = "Audio")]
-        [Column(TypeName = "VARCHAR(600)")]
-        [StringLength(600)]
-        public string AudioFile { get; set; }
+        //[Column(TypeName = "VARCHAR(600)")]
+        //[StringLength(600)]
+        public byte[]? AudioFile { get; set; }
 
-        [Required]
+        
         [Display(Name = "Creditos")]
-        [Column(TypeName = "VARCHAR(600)")]
-        [StringLength(600)]
-        public string CreditFile { get; set; }
+        //[Column(TypeName = "VARCHAR(600)")]
+        //[StringLength(600)]
+        public byte[]? CreditFile { get; set; }
 
         [Required]
         public int IdTypeTest { get; set; }
