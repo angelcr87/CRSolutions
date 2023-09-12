@@ -4,6 +4,238 @@
     ViewData["Title"] = "Create";
 }
 
+<div class=".container-lg">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="barHeader"></div>
+            <div class="logo-bar"><img src="~/images/logo.png" alt="logo"></div>
+            <div class="title-catalogue">Registro de Candidato</div>
+        </div>
+    </div>
+</div>
+<div class="separador"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-4">                   
+                    <div class="file-select" id="src-file1">
+                        <input type="file" name="src-file1" aria-label="Archivo" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div id="button-no-photo" class="buttons-profile"></div>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+            <br />
+
+            <div class="card centrando" style="width: 18rem">
+                <img src="~/images/avatar.png" class="card-img-top" alt="img-thumbnail" />
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-4">
+
+                    <div id="button-barcode" class="buttons-profile "></div>
+
+                </div>
+                <div class="col-md-4">
+                    <div id="button-credential" class="buttons-profile"></div>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+        </div>
+
+
+    
+            <div class="col-md-6">
+                <div class="container">
+                <form asp-action="Create">
+                    <div class="row">      
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label asp-for="IdCompany" class="form-label"></label>
+                                <select asp-for="IdCompany"  class="form-control" asp-items="ViewBag.IdCompany" placeholder="Toca para visualizar"></select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label asp-for="CURP" class="form-label"></label>
+                                <input asp-for="CURP" class="form-control" />
+                                <span asp-validation-for="CURP" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label asp-for="FullName" class="form-label"></label>
+                                <input asp-for="FullName" class="form-control" />
+                                <span asp-validation-for="FullName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label asp-for="EvaluatedPosition" class="form-label"></label>
+                                <input asp-for="EvaluatedPosition" class="form-control" />
+                                <span asp-validation-for="EvaluatedPosition" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label asp-for="IdUser" class="form-label"></label>
+                                <select asp-for="IdUser" class="form-control" asp-items="ViewBag.IdUser"></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                @* <label for="src-file2" class="form-label">Reporte</label>
+                                <div class="reporte" id="src-file2">
+                                    <input type="file" name="src-file2" aria-label="Archivo" />
+                                </div> *@
+                                <label asp-for="ReportFile" class="form-label"></label>
+                                <input asp-for="ReportFile" class="form-control" />
+                                <span asp-validation-for="ReportFile" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                @* <label for="src-file3" class="form-label">Audio</label>
+                                <div class="audio" id="src-file3">
+                                    <input type="file" name="src-file3" aria-label="Archivo" />
+                                </div> *@
+                                <label asp-for="AudioFile" class="form-label"></label>
+                                <input asp-for="AudioFile" class="form-control" />
+                                <span asp-validation-for="AudioFile" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                               @*  <label for="src-file4" class="form-label">Creditos</label>
+                                <div class="creditos" id="src-file4">
+                                    <input type="file" name="src-file4" aria-label="Archivo" />
+                                </div> *@
+                                <label asp-for="CreditFile" class="form-label"></label>
+                                <input asp-for="CreditFile" class="form-control" />
+                                <span asp-validation-for="CreditFile" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label asp-for="IdTypeTest" for="exampleDataList" class="form-label" style="color: rgb(12, 12, 65)">Tipo Test</label>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <!-- <label for="exampleFormControlInput4" class="form-label">Score de Riesgo</label> -->
+                                <!-- <input type="text" class="form-control" id="exampleFormControlInput4" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"> -->
+                                <input asp-for="IdTypeTest" type="radio" class="test" id="preeempleo" name="tipo_test" value="HTML" />
+                                <label for="preeempleo">Preempleo</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <input asp-for="IdTypeTest" type="radio" class="test" id="periodico" name="tipo_test" value="Periodico" />
+                                <label for="periodico">Periodico</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <input asp-for="IdTypeTest" type="radio" class="test" id="patrimonial" name="tipo_test" value="Patrimonial" />
+                                <label for="patrimonial">Patrimonial</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <input asp-for="IdTypeTest" type="radio" class="test" id="investigacion" name="tipo_test" value="Investigacion" />
+                                <label for="investigacion">Investigacion</label>
+                            </div>
+                        </div>
+                        <span asp-validation-for="IdTypeTest" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <!-- <label for="exampleFormControlInput4" class="form-label">Score de Riesgo</label> -->
+                                <!-- <input type="text" class="form-control" id="exampleFormControlInput4" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"> -->
+                                <label asp-for="IdRiskScore" for="exampleDataList" class="form-label"> Score</label>
+                                <input max="3" min="0" asp-for="IdRiskScore" class="form-control" list="datalistOptions2" id="exampleDataList"
+                                       placeholder="Toca para visualizar" />
+                                <datalist id="datalistOptions2">
+                                    <option value="0">Ninguno</option>
+                                    <option value="1">Verde</option>
+                                    <option value="2">Amarillo</option>
+                                    <option value="3">Rojo</option>
+                                </datalist>
+                                <span asp-validation-for="IdRiskScore" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="EvaluationDate" class="form-label"></label>
+                                <input asp-for="EvaluationDate" type="datetime-local" class="form-control"
+                                       aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
+                                <span asp-validation-for="EvaluationDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="RecordEvaluation" class="form-label"></label>
+                                <input asp-for="RecordEvaluation"  type="text" class="form-control" id="exampleFormControlInput6" aria-label="Sizing example input"
+                                       aria-describedby="inputGroup-sizing-default" />
+                                <span asp-validation-for="RecordEvaluation" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="BlackList" class="form-label"></label>
+                                <input asp-for="BlackList"  type="text" class="form-control" aria-label="Sizing example input"
+                                       aria-describedby="inputGroup-sizing-default" />
+                                <span asp-validation-for="BlackList" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="mb-3">
+                                <button asp-action="Create" class="btn botones-green form-control">Registrar</button>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="mb-3">
+                                <button asp-action="Modified" class="btn botones form-control">Modificar</button>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="mb-3">
+                                <button class="btn botones-gold form-control">Nuevo</button>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="mb-3">
+                                <button formaction="@Url.Action("Logout","Users")" class="btn botones-gray">Salir</button>
+                            </div>
+                        </div>
+                    </div>
+        </form>
+                </div>
+            </div>        
+    </div>
+</div>
+
+
+
+
+@* 
+
 <h1>Create</h1>
 
 <h4>Candidate</h4>
@@ -84,7 +316,7 @@
 
 <div>
     <a asp-action="Index">Back to List</a>
-</div>
+</div> *@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

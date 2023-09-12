@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CRSolutions.Models
@@ -17,6 +18,8 @@ namespace CRSolutions.Models
         [StringLength(500)]
         public string Description { get; set; }
         public bool Status { get; set; }
-        public  ICollection<User> Users { get; } = new List<User>(); // Collection navigation containing dependents
+
+        
+        public virtual ICollection<User> Users { get; } = new List<User>(); // Collection navigation containing dependents
     }
 }

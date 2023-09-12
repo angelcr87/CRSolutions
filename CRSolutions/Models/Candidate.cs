@@ -5,7 +5,7 @@ namespace CRSolutions.Models
 {
     public class Candidate
     {
-        [Key]        
+        [Key]
         public Guid IdCantidate { get; set; }
 
         [Required]
@@ -13,6 +13,11 @@ namespace CRSolutions.Models
         [Column(TypeName = "VARCHAR(300)")]
         [StringLength(300)]
         public string FullName { get; set; }
+
+        [Required] 
+        [Column(TypeName = "VARCHAR(300)")]
+        [StringLength(300)]
+        public string CURP { get; set; }
 
         //[Required]
         //[Display(Name = "Empresa")]
@@ -47,10 +52,10 @@ namespace CRSolutions.Models
         public string AudioFile { get; set; }
 
         [Required]
-        [Display(Name = "Foto")]
+        [Display(Name = "Creditos")]
         [Column(TypeName = "VARCHAR(600)")]
         [StringLength(600)]
-        public string PhotoFile { get; set; }
+        public string CreditFile { get; set; }
 
         [Required]
         public int IdTypeTest { get; set; }
@@ -69,8 +74,8 @@ namespace CRSolutions.Models
         [Display(Name = "Empresa")]
         public Guid IdCompany { get; set; }      
 
-        public User? User { get; set; } = null!;
-        public Company? Company { get; set; } = null!;  
+        public virtual User? User { get; set; } = null!;
+        public virtual Company? Company { get; set; } = null!;  
 
 
     }

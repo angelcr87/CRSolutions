@@ -1,5 +1,36 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Http;
+@using  Newtonsoft.Json;
+
+@{
+    if (Context.Session.GetString("User") ==null)
+    {
+        Context.Response.Redirect("/Users/Login");
+    }
+    else
+    {
+        CRSolutions.Models.User User = JsonConvert.DeserializeObject<User>(Context.Session.GetString("User"));
+
+        if (User.IdRol == Guid.Parse("4A74DA66-BCD1-4662-8625-CB7C3BF2A837")) //admin
+        {
+            Context.Response.Redirect("/Cantidades/Create");
+        }
+        if (User.IdRol == Guid.Parse("789A3411-ED70-42BD-9681-B0D9AE800583")) //admin cliente
+        {
+            Context.Response.Redirect("/Cantidades/Index");
+        }
+        if (User.IdRol == Guid.Parse("882E1047-29E1-4276-8BCE-6F2372670AE1"))  //cliente
+        {
+            Context.Response.Redirect("/Cantidades/Index");
+        } 
+
+    }
+
+    // if (User == null)
+    // {
+    //     Context.Response.Redirect("/Users/Login");
+    // }
     ViewData["Title"] = "Home Page";
+
 }
 
 <div class="text-center">

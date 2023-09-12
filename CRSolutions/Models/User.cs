@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace CRSolutions.Models
 {
@@ -25,16 +26,19 @@ namespace CRSolutions.Models
         [Display(Name = "Contraseña")]
         [Column(TypeName = "VARCHAR(100)")]
         [StringLength(100)]
-        public string Password { get; set; }
-        
+        [DataType(DataType.Password)]
+        [Compare("Password")]
+        public string Password { get; set; }        
         public bool Status { get; set; }        
         public Guid IdRol { get; set; }        
         public Guid IdCompany { get; set; }
 
-        public Role Role { get; set; } = null!;
-        public Company Company { get; set; } = null!;
+        [JsonIgnore]
+        public virtual Role Role { get; set; } = null!;
+        [JsonIgnore]
+        public virtual Company Company { get; set; } = null!;
 
-        public ICollection<Candidate> Candidates { get; } = new List<Candidate>(); // Collection navigation containing dependents
+        public virtual ICollection<Candidate> Candidates { get; } = new List<Candidate>(); // Collection navigation containing dependents
 
     }
 }

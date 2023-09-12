@@ -11,11 +11,14 @@ namespace CRSolutions.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+           
         }
 
         public IActionResult Index()
         {
+           // return Unauthorized();
             return View();
+           
         }
 
         public IActionResult Privacy()

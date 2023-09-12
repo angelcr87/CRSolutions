@@ -1,0 +1,92 @@
+﻿@model CRSolutions.Models.Login
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<video src="~/videos/video-login.mp4" autoplay loop playsinline muted></video>
+
+<!-- <div class=".container-lg">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="barHeader"></div>
+        </div>
+    </div>
+</div> -->
+<div class="separador"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 logo-login">
+            <div class="col-md-12">
+                <img src="~/images/logo.png" class="img-fluid" alt="img-thumbnail">
+            </div>
+            <div class="col-md-12"><span class="lema">El poder de "VER" la voz</span></span></div>
+        </div>
+        <div class="col-md-6">
+            <div class="login-border bordes rounded login-card">
+                <div class="separador"></div>
+                <div class="container-fluid ">
+                    <form asp-action="Login">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="row">
+                            <div class="col-md-12"><span class="welcome">Bienvenido</span></span></div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label asp-for="UserName" for="exampleFormControlInput1" class="form-label"></label>
+                                    <input asp-for="UserName" type="text" class="form-control" id="exampleFormControlInput1" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                    <span asp-validation-for="UserName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label asp-for="Password" for="exampleFormControlInput2" class="form-label">Contraseña</label>
+                                    <input asp-for="Password" type="password" class="form-control" id="exampleFormControlInput2" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-6 ">
+                                <div class="mb-3">
+                                    
+                                    <input type="submit" value="Iniciar Sesion" class="btn botones" />
+                                        @* <button type="submit" class="btn botones">Iniciar Sesion</button> *@
+                                  
+                                </div>
+                            </div>
+                            <div class="col-md-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <!-- <a href="buscarCurp.html"> -->
+                                    <button type="submit" class="btn botones-pass">Recuperar contraseña</button>
+                                    <!-- </a> -->
+                                    <span style="color:red;">@ViewBag.errorLogin</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">                                
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -9,6 +9,11 @@ builder.Services.AddDbContext<CRSolutionsDBContext>(options =>
     options.UseSqlServer(connectionString));
 //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromSeconds(300);
+    options.Cookie.HttpOnly = true;
+});
 
 builder.Services.AddControllersWithViews();
 var app = builder.Build();
@@ -20,7 +25,7 @@ var app = builder.Build();
 //}
 
     // Configure the HTTP request pipeline.
-    if (!app.Environment.IsDevelopment())
+    if (!app.Environment.IsProduction())
     {
         app.UseExceptionHandler("/Home/Error");
         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
@@ -34,8 +39,11 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+app.UseSession();
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+     pattern: "{controller=Users}/{action=Login}/{id?}");
+//pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
