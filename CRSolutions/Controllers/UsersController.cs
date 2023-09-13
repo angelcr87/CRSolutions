@@ -241,6 +241,7 @@ namespace CRSolutions.Controllers
         public IActionResult Logout()
         {
             HttpContext.Session.Remove("User");
+           // HttpContext.Session.Clear();
             return View("Login");
         }
 

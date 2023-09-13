@@ -53,7 +53,7 @@
     
             <div class="col-md-6">
                 <div class="container">
-                <form asp-action="Create">
+                <form asp-action="Create" enctype="multipart/form-data">
                     <div class="row">      
                         <div class="col-md-12">
                             <div class="mb-3">
@@ -142,25 +142,25 @@
                             <div class="mb-3">
                                 <!-- <label for="exampleFormControlInput4" class="form-label">Score de Riesgo</label> -->
                                 <!-- <input type="text" class="form-control" id="exampleFormControlInput4" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"> -->
-                                <input asp-for="IdTypeTest" type="radio" class="test" id="preeempleo" name="tipo_test" value="1" />
+                                <input asp-for="IdTypeTest" type="radio" class="test" id="preeempleo" name="IdTypeTest" value="1" />
                                 <label for="preeempleo">Preempleo</label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <input asp-for="IdTypeTest" type="radio" class="test" id="periodico" name="tipo_test" value="2" />
+                                <input asp-for="IdTypeTest" type="radio" class="test" id="periodico" name="IdTypeTest" value="2" />
                                 <label for="periodico">Periodico</label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <input asp-for="IdTypeTest" type="radio" class="test" id="patrimonial" name="tipo_test" value="3" />
+                                <input asp-for="IdTypeTest" type="radio" class="test" id="patrimonial" name="IdTypeTest" value="3" />
                                 <label for="patrimonial">Patrimonial</label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <input asp-for="IdTypeTest" type="radio" class="test" id="investigacion" name="tipo_test" value="4" />
+                                <input asp-for="IdTypeTest" type="radio" class="test" id="investigacion" name="IdTypeTest" value="4" />
                                 <label for="investigacion">Investigacion</label>
                             </div>
                         </div>
@@ -230,7 +230,7 @@
                         </div>
                         <div class="col-lg-3 col-md-6 col-sm-6">
                             <div class="mb-3">
-                                <button formaction="@Url.Action("Logout","Users")" class="btn botones-gray">Salir</button>
+                                <button formnovalidate formaction="@Url.Action("Logout","Users")" class="btn botones-gray">Salir</button>
                             </div>
                         </div>
                     </div>
