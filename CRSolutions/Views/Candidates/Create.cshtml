@@ -1,7 +1,8 @@
 ﻿@model CRSolutions.Models.Candidate
 
+
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create";    
 }
 
 <div class=".container-lg">
@@ -54,19 +55,24 @@
             <div class="col-md-6">
                 <div class="container">
                 <form asp-action="Create" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="IdCantidate" />
                     <div class="row">      
                         <div class="col-md-12">
                             <div class="mb-3">
                                 <label asp-for="IdCompany" class="form-label"></label>
                                 <select asp-for="IdCompany"  class="form-control" asp-items="ViewBag.IdCompany" placeholder="Toca para visualizar"></select>
+                           
                             </div>
                         </div>
 
                         <div class="col-md-12">
                             <div class="mb-3">
                                 <label asp-for="CURP" class="form-label"></label>
-                                <input asp-for="CURP" class="form-control" />
+                                <input asp-for="CURP"  class="form-control" />                                
+                                <button formnovalidate  formaction="@Url.Action("EditCandidate","Candidates")" class="btn botones form-control"><i class="fa-solid fa-magnifying-glass"></i></button>
                                 <span asp-validation-for="CURP" class="text-danger"></span>
+                                <span style="color:red;">@ViewBag.NotFound</span>
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -220,7 +226,7 @@
                         </div>
                         <div class="col-lg-3 col-md-6 col-sm-6">
                             <div class="mb-3">
-                                <button asp-action="Modified" class="btn botones form-control">Modificar</button>
+                                <button formnovalidate formmethod="post" formaction="@Url.Action("UpdateCandidate","Candidates")" class="btn botones form-control">Modificar</button>
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6 col-sm-6">
@@ -240,7 +246,28 @@
     </div>
 </div>
 
+@* <script>
+    document.getElementById("CURP").addEventListener("blur", function () {
+        // Obtén el valor del input
+        var valorInput = this.value;
 
+        // Realiza una solicitud AJAX al controlador
+        $.ajax({
+            url: '@Url.Action("EditCandidate", "Candidates")', // Reemplaza "TuAccion" y "TuControlador" con los valores correctos
+            method: 'GET', // Puedes usar 'GET' o 'POST' según tus necesidades
+            data: { CURP: valorInput }, // Envía el valor del input como parámetro
+            success: function (result) {
+                // Maneja la respuesta del controlador (si es necesario)
+                console.log(result);
+                 
+            },
+            error: function () {
+                // Maneja cualquier error que pueda ocurrir durante la solicitud AJAX
+                console.error("Error en la solicitud AJAX");
+            }
+        });
+    });
+</script> *@
 
 
 @* 

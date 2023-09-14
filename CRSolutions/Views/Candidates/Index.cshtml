@@ -4,6 +4,176 @@
     ViewData["Title"] = "Index";
 }
 
+
+<div class=".container-lg barHeaderblue">
+    <div class="row">
+        <!-- <div class="col-md-12">
+            <div class="barHeaderblue">
+                <div>
+                    <img src="images/logofondo.png" class="logo-img" alt="logo" >
+                </div>  
+                <div class="botones-menu">     
+                    <div class="boton-div">Regresar</div>
+                    <div class="boton-div">Salir</div>
+
+                </div>                 
+            </div>
+        </div> -->
+        
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2" style="text-align:-webkit-center">
+                        <img src="~/images/logo.png" class="logo-img" alt="logo" >
+                    </div>
+                    <div class="col-md-4 alinea-botones">
+                        <div class="container-1">                        
+                            <input type="search" id="search" placeholder="Buscar..." />
+                        </div>
+                    </div>
+                    <div class="col-md-2 alinea-botones"><input type="button" value="Regresar" class="boton-menu"></div>
+                    <div class="col-md-2 alinea-botones"> <input type="button" value="Creditos" class="boton-menu"></div>
+                    <div class="col-md-2 alinea-botones"><input type="button" value="Salir" class="boton-menu"></div>
+                    
+                    
+
+                    
+                    <!-- <div class="botones-menu"> -->
+                        
+                       
+                        
+                </div>
+            </div>
+            </div>
+            <!-- <div class="col-md-6 col-sm-10 col-xm-12  botones-menu">
+                <input type="button" value="Regresar" class="boton-menu">
+                <input type="button" value="Salir" class="boton-menu">
+            </div> -->
+        
+    </div>
+
+</div>
+<div class="separador"></div>
+
+<div class="encabezado">Clientes</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive text-nowrap">
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                            <th scope="col">  @Html.DisplayNameFor(model => model.FullName) </th>
+                            <th scope="col"> @Html.DisplayNameFor(model => model.EvaluatedPosition) </th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.IdUser)</th>
+                            <th scope="col">@Html.DisplayNameFor(model => model.IdTypeTest)</th>
+                            <th scope="col">@Html.DisplayNameFor(model => model.EvaluationDate)</th>
+                    <th scope="col">Antigüedad</th>
+                            <th scope="col">@Html.DisplayNameFor(model => model.IdRiskScore)</th>
+                            <th scope="col">@Html.DisplayNameFor(model => model.ReportFile)</th>
+                            <th scope="col">@Html.DisplayNameFor(model => model.AudioFile)</th>
+                            <th scope="col">@Html.DisplayNameFor(model => model.CreditFile)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model.OrderByDescending(c => c.EvaluationDate)) {
+
+                  <tr>
+                    <th scope="row">
+                                    @Html.DisplayFor(modelItem => item.FullName)
+                    </th>
+                    <td>
+                                    @Html.DisplayFor( modelItem => item.EvaluatedPosition)
+                    </td>
+                    <td>
+                                    @Html.DisplayFor(modelItem => item.User.FullName)
+                    </td>
+                    <td>
+                                    @{
+                                        switch(item.IdTypeTest)
+                                        {
+                                            case 1:
+                                                <span>Preempleo</span>                                                
+                                                break;
+                                            case 2:
+                                                <span>Periodico</span>
+                                                break;
+                                            case 3:
+                                                <span>Patrimonial</span>
+                                                break;
+                                            case 4:
+                                                <span>Investigacion</span>
+                                                break;
+                                        }
+                                    }
+                                    
+                    </td>
+                    <td>
+                                    @String.Format("{0:d}", item.EvaluationDate)
+                    </td>
+                    <td>
+                                    @Html.DisplayFor(modelItem => item.antiquity)
+                    </td>
+
+                                @{
+                                    switch(item.IdRiskScore)
+                                    {
+                                        case 1:
+                                            <td style="color: green;"><i class="fa-solid fa-circle"></i></td>
+                                            break;
+                                        case 2:
+                                            <td style="color: yellow;"><i class="fa-solid fa-circle"></i></td>
+                                            break;
+                                        case 3:
+                                            <td style="color: red;"><i class="fa-solid fa-circle"></i></td>
+                                            break;
+                                    }
+                                }                   
+
+                    <td>
+                                    @if (item.ReportFile != null)
+                                    {
+                                        <a target="_blank" href="@Url.Action("GetFile","Candidates", new{ id = item.IdCantidate, typeFile="application/pdf", file="ReportFile" })"> 
+                                            <i class="fa-solid fa-registered"></i>
+                                        </a>
+                                    }
+                     </td>
+                    <td>
+                                    @if (item.AudioFile != null)
+                                    {
+                                        <a target="_blank" href="@Url.Action("GetFile","Candidates", new{ id = item.IdCantidate, typeFile="audio/mpeg", file="AudioFile" })">
+                                            <i class="fa-solid fa-bullhorn"></i>
+                                        </a>
+                                    }
+                                </td>
+                    <td>
+                                    @if (item.CreditFile != null)
+                                    {
+                                        <a target="_blank" href="@Url.Action("GetFile","Candidates", new{ id = item.IdCantidate, typeFile="application/pdf", file="CreditFile" })">
+                                            <i class="fa-regular fa-credit-card"></i>
+                                        </a>
+                                    }
+                    </td>
+                  </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+}
+
+
+
+
+
+
+
+
+
+@* 
 <h1>Index</h1>
 
 <p>
@@ -70,20 +240,25 @@
                 @Html.DisplayFor(modelItem => item.EvaluationDate)
             </td>
             <td>
-                    <a target="_blank" href="@Url.Action("GetFile","Candidates", new{ id = item.IdCantidate, typeFile="application/pdf", file="ReportFile" })">Reporte</a>
-               @*  @Html.DisplayFor(modelItem => item.ReportFile) *@
+                    @if (item.ReportFile != null)
+                    {
+                        <a target="_blank" href="@Url.Action("GetFile","Candidates", new{ id = item.IdCantidate, typeFile="application/pdf", file="ReportFile" })">Reporte</a>                        
+                    }               
+             
             </td>
             <td>
-               @*  @Html.DisplayFor(modelItem => item.AudioFile) *@
+              
                @if(item.AudioFile != null)
-                    {
-                        <a target="_blank" href="@Url.Action("GetFile","Candidates", new{ id = item.IdCantidate, typeFile="audio/mpeg", file="AudioFile" })">Audio</a>
-                    }
+                {
+                   <a target="_blank" href="@Url.Action("GetFile","Candidates", new{ id = item.IdCantidate, typeFile="audio/mpeg", file="AudioFile" })">Audio</a>
+                }
                    
             </td>
             <td>
-                   @*  @Html.DisplayFor(modelItem => item.CreditFile) *@
-                    <a target="_blank" href="@Url.Action("GetFile","Candidates", new{ id = item.IdCantidate, typeFile="application/pdf", file="CreditFile" })">Credito</a>
+                    @if (item.CreditFile != null)
+                    {
+                        <a target="_blank" href="@Url.Action("GetFile","Candidates", new{ id = item.IdCantidate, typeFile="application/pdf", file="CreditFile" })">Credito</a>
+                    }                    
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IdTypeTest)
@@ -112,3 +287,4 @@
 }
     </tbody>
 </table>
+ *@

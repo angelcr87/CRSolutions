@@ -13,12 +13,12 @@ namespace CRSolutions.Models
         [Display(Name = "Nombre Completo")]
         [Column(TypeName = "VARCHAR(300)")]
         [StringLength(300)]
-        public string FullName { get; set; }
+        public string? FullName { get; set; }
 
         [Required]
         [Column(TypeName = "VARCHAR(300)")]
         [StringLength(300)]
-        public string CURP { get; set; }
+        public string? CURP { get; set; }
 
         //[Required]
         //[Display(Name = "Empresa")]
@@ -29,15 +29,15 @@ namespace CRSolutions.Models
         //public Guid? IdUser { get; set; }
 
         [Required]
-        [Display(Name = "Posicion Evualuada")]
+        [Display(Name = "Posición Evaluada")]
         [Column(TypeName = "VARCHAR(300)")]
         [StringLength(300)]
-        public string EvaluatedPosition { get; set; }
+        public string? EvaluatedPosition { get; set; }
         [Required]
         [Display(Name = "Score de Riesgo")]
         public int IdRiskScore { get; set; }
         [Required]
-        [Display(Name = "Fecha Evualuacion")]
+        [Display(Name = "Fecha Evaluacion")]
         public DateTime EvaluationDate { get; set; }
 
         
@@ -59,13 +59,14 @@ namespace CRSolutions.Models
         public byte[]? CreditFile { get; set; }
 
         [Required]
+        [Display(Name = "Tipo Test")]
         public int IdTypeTest { get; set; }
 
         [Display(Name = "Hist. de Eval.")]
         [Column(TypeName = "VARCHAR(300)")]
         [StringLength(300)]
-        public string RecordEvaluation { get; set; }
-        public string BlackList { get; set; }
+        public string? RecordEvaluation { get; set; }
+        public string? BlackList { get; set; }
 
         public bool Status { get; set; }
 
@@ -73,7 +74,10 @@ namespace CRSolutions.Models
         public Guid? IdUser { get; set; }
 
         [Display(Name = "Empresa")]
-        public Guid IdCompany { get; set; }      
+        public Guid IdCompany { get; set; }
+
+        [NotMapped]
+        public string? antiquity { get; set; }
 
         public virtual User? User { get; set; } = null!;
         public virtual Company? Company { get; set; } = null!;  
