@@ -24,15 +24,15 @@
             <th>
                 @Html.DisplayNameFor(model => model.EvaluationDate)
             </th>
-@*             <th>
+            <th>
                 @Html.DisplayNameFor(model => model.ReportFile)
             </th>
-            <th>
+             <th>
                 @Html.DisplayNameFor(model => model.AudioFile)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CreditFile)
-            </th> *@
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.IdTypeTest)
             </th>
@@ -69,15 +69,22 @@
             <td>
                 @Html.DisplayFor(modelItem => item.EvaluationDate)
             </td>
-@*             <td>
-                @Html.DisplayFor(modelItem => item.ReportFile)
+            <td>
+                    <a target="_blank" href="@Url.Action("GetFile","Candidates", new{ id = item.IdCantidate, typeFile="application/pdf", file="ReportFile" })">Reporte</a>
+               @*  @Html.DisplayFor(modelItem => item.ReportFile) *@
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.AudioFile)
+               @*  @Html.DisplayFor(modelItem => item.AudioFile) *@
+               @if(item.AudioFile != null)
+                    {
+                        <a target="_blank" href="@Url.Action("GetFile","Candidates", new{ id = item.IdCantidate, typeFile="audio/mpeg", file="AudioFile" })">Audio</a>
+                    }
+                   
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.CreditFile)
-            </td> *@
+                   @*  @Html.DisplayFor(modelItem => item.CreditFile) *@
+                    <a target="_blank" href="@Url.Action("GetFile","Candidates", new{ id = item.IdCantidate, typeFile="application/pdf", file="CreditFile" })">Credito</a>
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IdTypeTest)
             </td>

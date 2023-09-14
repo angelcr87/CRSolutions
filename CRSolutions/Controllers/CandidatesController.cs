@@ -10,6 +10,7 @@ using CRSolutions.Models;
 using CRSolutions.Extensions;
 using System;
 using System.IO;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CRSolutions.Controllers
 {
@@ -51,6 +52,33 @@ namespace CRSolutions.Controllers
                // return Unauthorized();
                 return  RedirectToAction("Login","Users");
             }
+        }
+
+        public IActionResult GetFile(Guid id, string typeFile, string file)
+        {
+            //typeFile: "audio/mpeg" o  "application/pdf"
+            byte[]? FileB = null;
+            if (file == "ReportFile")
+            {
+                byte[] FileBytes = _context.Candidates.Find(id).ReportFile ;
+                FileB = FileBytes;
+            }
+            if (file == "AudioFile")
+            {
+                byte[] FileBytes = _context.Candidates.Find(id).AudioFile;
+                FileB = FileBytes;
+            }
+            if (file == "CreditFile")
+            {
+                byte[] FileBytes = _context.Candidates.Find(id).CreditFile;
+                FileB = FileBytes;
+            }      
+            
+            //byte[] FileBytes = Archivo;
+            var fileStream = new System.IO.MemoryStream();
+            fileStream.Write(FileB, 0, FileB.Length);
+            fileStream.Position = 0;
+            return new FileStreamResult(fileStream, typeFile);
         }
 
         // GET: Candidates/Details/5
