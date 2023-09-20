@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
@@ -78,6 +79,12 @@ namespace CRSolutions.Models
 
         [NotMapped]
         public string? antiquity { get; set; }
+        [NotMapped]
+        public IFormFile? routeReportFile { get; set; }
+        [NotMapped]
+        public IActionResult? routeAudioFile { get; set; }
+        [NotMapped]
+        public IActionResult? routeCreditFile { get; set; }
 
         public virtual User? User { get; set; } = null!;
         public virtual Company? Company { get; set; } = null!;  

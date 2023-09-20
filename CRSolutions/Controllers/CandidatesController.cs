@@ -12,6 +12,8 @@ using System;
 using System.IO;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Runtime.InteropServices;
+using System.Collections;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace CRSolutions.Controllers
 {
@@ -33,7 +35,7 @@ namespace CRSolutions.Controllers
                 if (user.IdRol == Guid.Parse("882E1047-29E1-4276-8BCE-6F2372670AE1")) //Cliente
                 {
 
-                    var cRSolutionsDBContext = _context.Candidates.Include(c => c.Company).Include(c => c.User);
+                    var cRSolutionsDBContext = _context.Candidates.Where(c => c.IdUser==user.IdUser).Include(c => c.Company).Include(c => c.User);
                     foreach (var item in cRSolutionsDBContext)
                     {
                         item.antiquity = CompareDates(item.EvaluationDate, DateTime.Now);
@@ -90,6 +92,36 @@ namespace CRSolutions.Controllers
             fileStream.Position = 0;
             return new FileStreamResult(fileStream, typeFile);
         }
+
+
+        public IFormFile GetFormFile(Guid id, string typeFile, string file)
+        {
+            //typeFile: "audio/mpeg" o  "application/pdf"
+            byte[]? FileB = null;
+            if (file == "ReportFile")
+            {
+                byte[] FileBytes = _context.Candidates.Find(id).ReportFile;
+                FileB = FileBytes;
+            }
+            if (file == "AudioFile")
+            {
+                byte[] FileBytes = _context.Candidates.Find(id).AudioFile;
+                FileB = FileBytes;
+            }
+            if (file == "CreditFile")
+            {
+                byte[] FileBytes = _context.Candidates.Find(id).CreditFile;
+                FileB = FileBytes;
+            }
+
+            //byte[] FileBytes = Archivo;
+            var fileStream = new System.IO.MemoryStream();
+            fileStream.Write(FileB, 0, FileB.Length);
+            fileStream.Position = 0;
+            return new FormFile(fileStream, 0, FileB.Length, file, file);
+        }
+
+
 
         public string CompareDates (DateTime fechaInicio, DateTime fechaFin)
         {
@@ -175,7 +207,11 @@ namespace CRSolutions.Controllers
         {
             if (CURP == null || _context.Candidates == null)
             {
-                return NotFound();
+                
+                ViewData["NotFound"] = "CURP no encontrado en la Base de datos";
+                ViewData["IdCompany"] = new SelectList(_context.Companies, "IdCompany", "CompanyName");
+                ViewData["IdUser"] = new SelectList(_context.Users, "IdUser", "FullName");
+                return View("Create");
             }
 
             //var candidate =  (from c in _context.Candidates
@@ -186,7 +222,7 @@ namespace CRSolutions.Controllers
 
             if (candidate == null)
             {
-                ViewData["NotFound"] = "No existe el Cliente en la BD";
+                ViewData["NotFound"] = "CURP no encontrado en la Base de datos";
                 ViewData["IdCompany"] = new SelectList(_context.Companies, "IdCompany", "CompanyName");
                 ViewData["IdUser"] = new SelectList(_context.Users, "IdUser", "FullName");
 
@@ -196,13 +232,15 @@ namespace CRSolutions.Controllers
             else
             {
                 ViewData["NotFound"] = "";
+          
             }
+            ViewData["DisabledButton"] = "disabled";
             ViewData["IdCompany"] = new SelectList(_context.Companies, "IdCompany", "CompanyName", candidate.IdCompany);
             ViewData["IdUser"] = new SelectList(_context.Users, "IdUser", "FullName", candidate.IdUser);
             return View("Create",candidate);
         }
 
-        [HttpPost]
+        [HttpPost]        
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateCandidate(Guid IdCantidate, [Bind("IdCantidate,FullName,EvaluatedPosition,IdRiskScore,EvaluationDate,ReportFile,AudioFile,CreditFile,IdTypeTest,RecordEvaluation,BlackList,Status,IdUser,IdCompany,CURP")] Candidate candidate, IFormFile? ReportFile, IFormFile? CreditFile, IFormFile? AudioFile)
         {
@@ -213,7 +251,8 @@ namespace CRSolutions.Controllers
 
             if (ModelState.IsValid)
             {
-               // Candidate candidateOriginal = await _context.Candidates.FindAsync(IdCantidate);
+                Candidate candidateOriginal = await _context.Candidates.FindAsync(candidate.IdCantidate);
+                
                 //Procesamos Audio
                 if (AudioFile != null && AudioFile.Length > 0)
                 {
@@ -238,13 +277,15 @@ namespace CRSolutions.Controllers
                     {
                         // Maneja cualquier excepción que pueda ocurrir al procesar el archivo
                         ViewBag.Error = "Ocurrió un error al procesar el archivo de audio: " + ex.Message;
+                       
                     }
                 }
                 else
                 {
                     // En caso de que no se haya proporcionado un archivo válido, puedes manejar el error aquí.
                     //ViewBag.Error = "Por favor, selecciona un archivo de audio válido.";
-                   
+                    candidate.AudioFile = candidateOriginal.AudioFile;
+
                 }
 
                 //Procesamos documento de credito
@@ -277,7 +318,7 @@ namespace CRSolutions.Controllers
                 {
                     // En caso de que no se haya proporcionado un archivo válido, puedes manejar el error aquí.
                     //ViewBag.Error = "Por favor, selecciona un archivo de audio válido.";
-                    c
+                    candidate.CreditFile = candidateOriginal.CreditFile;
                 }
 
                 //Procesamos documento Reporte
@@ -304,20 +345,22 @@ namespace CRSolutions.Controllers
                     {
                         // Maneja cualquier excepción que pueda ocurrir al procesar el archivo
                         ViewBag.Error = "Ocurrió un error al procesar el archivo de audio: " + ex.Message;
+                        
                     }
                 }
                 else
                 {
                     // En caso de que no se haya proporcionado un archivo válido, puedes manejar el error aquí.
-                   // ViewBag.Error = "Por favor, selecciona un archivo de audio válido.";
-                   
+                    // ViewBag.Error = "Por favor, selecciona un archivo de audio válido.";
+                    candidate.ReportFile = candidateOriginal.ReportFile;
                 }
 
                 try
                 {
                    
-                    
-                    _context.Update(candidate);
+                   // _context.Entry(candidate).State = EntityState.Modified;
+                    //_context.Update(candidate);
+                    _context.Entry(candidateOriginal).CurrentValues.SetValues(candidate);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

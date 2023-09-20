@@ -1,11 +1,45 @@
 ﻿@model CRSolutions.Models.Candidate
-
+@using Newtonsoft.Json;
 
 @{
-    ViewData["Title"] = "Create";    
+    ViewData["Title"] = "Create";
+    CRSolutions.Models.User usuario = null;
+
+    if (Context.Session.GetString("User") != null)
+    {
+        usuario = JsonConvert.DeserializeObject<CRSolutions.Models.User>(Context.Session.GetString("User"));
+        // var UserName = User.UserName;
+        // var IdRol = User.IdRol;
+
+    }
 }
 
-<div class=".container-lg">
+<div class=".container-lg barHeaderblue">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-2" style="text-align:-webkit-center">
+                    <img src="~/images/logo.png" class="logo-img" alt="logo">
+                </div>
+          @*       <div class="col-md-4 alinea-botones">
+                    <div class="container-1">
+                        <input type="search" id="search" placeholder="Buscar..." />
+                    </div>
+                </div> *@
+                @* <div class="col-md-2 alinea-botones"><input type="button" value="Regresar" class="boton-menu"></div> *@
+               @*  <div class="col-md-2 alinea-botones"> <input type="button" value="Creditos" class="boton-menu"></div> *@
+                @* <div class="col-md-2 alinea-botones"><input type="button" value="Salir" class="boton-menu"></div> *@
+                <div class=" col-md-6 title-catalogue">Registro de Candidato</div>
+                <div class="col-md-4 user-session">
+                    <span>@usuario.FullName</span><br />
+                    <a href="@Url.Action("Logout","Users")"><span> Cerrar Sesion</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* <div class=".container-lg">
     <div class="row">
         <div class="col-md-12">
             <div class="barHeader"></div>
@@ -13,7 +47,7 @@
             <div class="title-catalogue">Registro de Candidato</div>
         </div>
     </div>
-</div>
+</div> *@
 <div class="separador"></div>
 <div class="container">
     <div class="row">
@@ -70,7 +104,7 @@
                             <div class="mb-3">
                                 <label asp-for="CURP" class="form-label"></label>
                                 <input asp-for="CURP"  class="form-control" />                                
-                                <button formnovalidate  formaction="@Url.Action("EditCandidate","Candidates")" class="btn botones form-control"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                <button formnovalidate onclick="enviarPeticion()" formaction="@Url.Action("EditCandidate","Candidates")" class="btn botones form-control"><i class="fa-solid fa-magnifying-glass"></i></button>
                                 <span asp-validation-for="CURP" class="text-danger"></span>
                                 <span style="color:red;">@ViewBag.NotFound</span>
                             </div>
@@ -100,15 +134,33 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="mb-3">
-                                @* <label for="src-file2" class="form-label">Reporte</label>
-                                <div class="reporte" id="src-file2">
-                                    <input type="file" name="src-file2" aria-label="Archivo" />
-                                </div> *@
-                                <label asp-for="ReportFile" class="form-label"></label>
-                                @* <input asp-for="ReportFile" class="form-control" /> *@
+                                <label asp-for="ReportFile" class="form-label"></label>                               
                                 <div class="reporte" id="src-file2">
                                     <input asp-for="ReportFile" type="file" class="form-control" />
                                 </div>
+                                <span asp-validation-for="ReportFile" class="text-danger"></span>
+                                @* <label asp-for="ReportFile" class="form-label"></label> *@
+                                @* <input asp-for="ReportFile" class="form-control" /> *@
+                       @*          @{
+                                    if (Html.DisplayFor(model => model.ReportFile) == null || Html.DisplayFor(model => model.ReportFile).ToString() == "")
+                                    {
+                                        <div class="reporte" id="src-file2">
+                                            <input asp-for="ReportFile" type="file" class="form-control" />
+                                            
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <a target="_blank" asp-for="ReportFile" href="@Model.routeReportFile">
+                                            <i class="fa-solid fa-registered"></i>
+                                        </a>
+                                        <div class="reporte" id="src-file2">
+                                            <input asp-for="routeReportFile" type="file" class="form-control" />
+                                        </div>
+                                        
+                                    }
+                                } *@
+                                
                                 <span asp-validation-for="ReportFile" class="text-danger"></span>
                             </div>
                         </div>
@@ -220,8 +272,8 @@
 
                     <div class="row">
                         <div class="col-lg-3 col-md-6 col-sm-6">
-                            <div class="mb-3">
-                                <button asp-action="Create" class="btn botones-green form-control">Registrar</button>
+                            <div class="mb-3">                             
+                                <button asp-action="Create" id="Create"  class="btn botones-green form-control" >Registrar</button>                                 
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6 col-sm-6">
@@ -268,6 +320,44 @@
         });
     });
 </script> *@
+<script>
+    function DisabledButtonCreate() {
+    
+        var idCandidate = document.getElementById("IdCantidate");
+        var button = document.getElementById("Create");
+        //var model = @Model
+        if (idCandidate != null || idCandidate.value != "") {
+            // Si el modelo no es null y someProperty no es una cadena vacía, habilita el botón
+            button.disabled = false;
+        } else {
+            // De lo contrario, deshabilita el botón
+            button.disabled = true;
+        }
+
+    }
+
+    $(".target").on("change", function () {
+        alert("Handler for `change` called.");
+    });
+
+    // function enviarPeticion() {
+    //     fetch('@Url.Action("EditCandidate","Candidates")')
+    //         .then(response => {
+    //             if (!response.ok) {
+    //                 throw new Error('Network response was not ok');
+    //             }
+    //             return response.json();
+    //         })
+    //         .then(data => {
+    //             DisabledButtonCreate(); // Llama a tu función aquí
+    //         })
+    //         .catch(error => {
+    //             console.error('There has been a problem with your fetch operation:', error);
+    //         });
+    // }
+    
+
+</script>
 
 
 @* 

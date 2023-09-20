@@ -1,7 +1,18 @@
 ﻿@model IEnumerable<CRSolutions.Models.Candidate>
+@using Newtonsoft.Json;
 
 @{
     ViewData["Title"] = "Index";
+    CRSolutions.Models.User usuario = null;
+    
+
+    if (Context.Session.GetString("User") != null)
+    {
+        usuario = JsonConvert.DeserializeObject<CRSolutions.Models.User>(Context.Session.GetString("User"));
+        // var UserName = User.UserName;
+        // var IdRol = User.IdRol;
+
+    }
 }
 
 
@@ -30,10 +41,27 @@
                             <input type="search" id="search" placeholder="Buscar..." />
                         </div>
                     </div>
-                    <div class="col-md-2 alinea-botones"><input type="button" value="Regresar" class="boton-menu"></div>
-                    <div class="col-md-2 alinea-botones"> <input type="button" value="Creditos" class="boton-menu"></div>
-                    <div class="col-md-2 alinea-botones"><input type="button" value="Salir" class="boton-menu"></div>
+                    @* <div class="col-md-2 alinea-botones"><input type="button" value="Regresar" class="boton-menu"></div> *@
+
+                @{
+                    if (usuario.IdRol == Guid.Parse("789A3411-ED70-42BD-9681-B0D9AE800583")) // Rol de Cliente Administrador
+                    {
+                        var user_Recent = Model.OrderByDescending(c => c.EvaluationDate).Where(c => c.CreditFile != null).FirstOrDefault().IdCantidate;
+
+                        <div class="col-md-2 alinea-botones">
+                            <input type="button" formaction="@Url.Action("GetFile","Candidates", new{ id = user_Recent, typeFile="application/pdf", file="CreditFile" })" value="Creditos" class="boton-menu">
+                        </div>
+                    }
+                }            
+
+
+                    @* <div class="col-md-2 alinea-botones"><input type="button" value="Salir" class="boton-menu"></div> *@
+                <div class="col-md-4 user-session">
+                    <span>@usuario.FullName</span><br /> 
+                    <a href="@Url.Action("Logout","Users")"><span> Cerrar Sesion</span></a>
+                </div>
                     
+
                     
 
                     
@@ -43,15 +71,14 @@
                         
                 </div>
             </div>
-            </div>
+    </div>
             <!-- <div class="col-md-6 col-sm-10 col-xm-12  botones-menu">
                 <input type="button" value="Regresar" class="boton-menu">
                 <input type="button" value="Salir" class="boton-menu">
             </div> -->
         
-    </div>
-
 </div>
+
 <div class="separador"></div>
 
 <div class="encabezado">Clientes</div>
