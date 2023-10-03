@@ -37,8 +37,9 @@
                         <img src="~/images/logo.png" class="logo-img" alt="logo" >
                     </div>
                     <div class="col-md-4 alinea-botones">
-                        <div class="container-1">                        
-                            <input type="search" id="search" placeholder="Buscar..." />
+                        <div class="container-1">
+                        @* <input type="search" id="search" class="" aria-controls="candidates" onkeyup="doSearch()" placeholder="Buscar..." /> *@
+                        <input type="search" id="search" class="" aria-controls="candidates" placeholder="Buscar..." />
                         </div>
                     </div>
                     @* <div class="col-md-2 alinea-botones"><input type="button" value="Regresar" class="boton-menu"></div> *@
@@ -48,8 +49,13 @@
                     {
                         var user_Recent = Model.OrderByDescending(c => c.EvaluationDate).Where(c => c.CreditFile != null).FirstOrDefault().IdCantidate;
 
-                        <div class="col-md-2 alinea-botones">
-                            <input type="button" formaction="@Url.Action("GetFile","Candidates", new{ id = user_Recent, typeFile="application/pdf", file="CreditFile" })" value="Creditos" class="boton-menu">
+                        @* <input type="button" formaction="@Url.Action("GetFile","Candidates", new{ id = user_Recent, typeFile="application/pdf", file="CreditFile" })" value="Creditos" class="boton-menu"> *@
+                        <div class="col-md-2" style="margin:auto;">
+                            <a target="_blank" href="@Url.Action("GetFile","Candidates", new{ id = user_Recent, typeFile="application/pdf", file="CreditFile" })">
+                                <div class="alinea-botones btn-credito">
+                                Creditos                            
+                                </div>
+                            </a>
                         </div>
                     }
                 }            
@@ -86,7 +92,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive text-nowrap">
-            <table class="table table-hover">
+                <table class="table table-hover display" id="candidates" style="width:100%">
                 <thead>
                   <tr>
                             <th scope="col">  @Html.DisplayNameFor(model => model.FullName) </th>
@@ -105,9 +111,9 @@
                 @foreach (var item in Model.OrderByDescending(c => c.EvaluationDate)) {
 
                   <tr>
-                    <th scope="row">
+                    <td scope="row">
                                     @Html.DisplayFor(modelItem => item.FullName)
-                    </th>
+                    </td>
                     <td>
                                     @Html.DisplayFor( modelItem => item.EvaluatedPosition)
                     </td>
@@ -119,16 +125,16 @@
                                         switch(item.IdTypeTest)
                                         {
                                             case 1:
-                                                <span>Preempleo</span>                                                
+                                                    <span>Preempleo</span>                                                
                                                 break;
                                             case 2:
-                                                <span>Periodico</span>
+                                                    <span>Periodico</span>
                                                 break;
                                             case 3:
-                                                <span>Patrimonial</span>
+                                                    <span>Patrimonial</span>
                                                 break;
                                             case 4:
-                                                <span>Investigacion</span>
+                                                    <span>Investigacion</span>
                                                 break;
                                         }
                                     }
@@ -140,21 +146,22 @@
                     <td>
                                     @Html.DisplayFor(modelItem => item.antiquity)
                     </td>
-
+                   
                                 @{
                                     switch(item.IdRiskScore)
                                     {
                                         case 1:
-                                            <td style="color: green;"><i class="fa-solid fa-circle"></i></td>
+                                                <td style="color: green;"><i class="fa-solid fa-circle"></i></td>
                                             break;
                                         case 2:
-                                            <td style="color: yellow;"><i class="fa-solid fa-circle"></i></td>
+                                                <td style="color: yellow;"><i class="fa-solid fa-circle"></i></td>
                                             break;
                                         case 3:
-                                            <td style="color: red;"><i class="fa-solid fa-circle"></i></td>
+                                                <td style="color: red;"><i class="fa-solid fa-circle"></i></td>
                                             break;
                                     }
-                                }                   
+                                }
+                    
 
                     <td>
                                     @if (item.ReportFile != null)
@@ -171,7 +178,7 @@
                                             <i class="fa-solid fa-bullhorn"></i>
                                         </a>
                                     }
-                                </td>
+                    </td>
                     <td>
                                     @if (item.CreditFile != null)
                                     {
@@ -182,7 +189,33 @@
                     </td>
                   </tr>
                   }
+                        <tr class='noSearch hide'>
+                            <td ></td>
+                            <td ></td>
+                            <td ></td>
+                            <td ></td>
+                            <td ></td>
+                            <td ></td>
+                            <td></td>
+                            <td ></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
                 </tbody>
+                <tfoot>
+                        <tr>
+                            <th scope="col">  @Html.DisplayNameFor(model => model.FullName) </th>
+                            <th scope="col"> @Html.DisplayNameFor(model => model.EvaluatedPosition) </th>
+                            <th scope="col">@Html.DisplayNameFor(model => model.IdUser)</th>
+                            <th scope="col">@Html.DisplayNameFor(model => model.IdTypeTest)</th>
+                            <th scope="col">@Html.DisplayNameFor(model => model.EvaluationDate)</th>
+                            <th scope="col">Antigüedad</th>
+                            <th scope="col">@Html.DisplayNameFor(model => model.IdRiskScore)</th>
+                            <th scope="col">@Html.DisplayNameFor(model => model.ReportFile)</th>
+                            <th scope="col">@Html.DisplayNameFor(model => model.AudioFile)</th>
+                            <th scope="col">@Html.DisplayNameFor(model => model.CreditFile)</th>
+                        </tr>
+                </tfoot>
               </table>
             </div>
         </div>
@@ -315,3 +348,129 @@
     </tbody>
 </table>
  *@
+
+
+<script>
+
+    // function busqueda() {
+    //     const searchText = document.getElementById('search').value.toLowerCase();
+
+    //     document.get
+
+    // }
+
+
+    function doSearch() {
+
+        const tableReg = document.getElementById('candidates');
+
+        const searchText = document.getElementById('search').value.toLowerCase();
+
+        let total = 0;
+
+
+
+        // Recorremos todas las filas con contenido de la tabla
+
+        for (let i = 1; i < tableReg.rows.length; i++) {
+
+            // Si el td tiene la clase "noSearch" no se busca en su cntenido
+
+            if (tableReg.rows[i].classList.contains("noSearch")) {
+
+                continue;
+
+            }
+
+
+
+            let found = false;
+
+            const cellsOfRow = tableReg.rows[i].getElementsByTagName('td');
+
+            // Recorremos todas las celdas
+
+            for (let j = 0; j < cellsOfRow.length && !found; j++) {
+
+                const compareWith = cellsOfRow[j].innerHTML.toLowerCase();
+
+                // Buscamos el texto en el contenido de la celda
+
+                if (searchText.length == 0 || compareWith.indexOf(searchText) > -1) {
+
+                    found = true;
+
+                    total++;
+
+                }
+
+            }
+
+            if (found) {
+
+                tableReg.rows[i].style.display = '';
+
+            } else {
+
+                // si no ha encontrado ninguna coincidencia, esconde la
+
+                // fila de la tabla
+
+                tableReg.rows[i].style.display = 'none';
+
+            }
+
+        }
+
+
+
+        // mostramos las coincidencias
+
+        const lastTR = tableReg.rows[tableReg.rows.length - 1];
+
+        const td = lastTR.querySelector("td");
+
+        lastTR.classList.remove("hide", "red");
+
+        if (searchText == "") {
+
+            lastTR.classList.add("hide");
+
+        } else if (total) {
+
+            td.innerHTML = "Se ha encontrado " + total + " coincidencia" + ((total > 1) ? "s" : "");
+
+        } else {
+
+            lastTR.classList.add("red");
+
+            td.innerHTML = "No se han encontrado coincidencias";
+
+        }
+
+    }
+    // new DataTable('#candidates', {
+    //     pagingType: 'full_numbers'
+    // });
+
+     // // $(document).ready(function () {
+     // //     $('#candidates').DataTable();
+
+     // // });
+
+    // $(document).ready(function () {
+    //     /* $('#candidates').DataTable();*/
+  
+    //     $('search').on('keyup', function () {
+    //         $('#searchTable').val($(this).val());
+
+    //     });
+
+
+    // });
+
+ 
+
+
+
+</script>

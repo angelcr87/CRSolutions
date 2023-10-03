@@ -27,7 +27,7 @@ namespace CRSolutions.Controllers
         }
 
         // GET: Candidates
-        public async Task<IActionResult> Index()
+        public  IActionResult Index()
         {
             User user = HttpContext.Session.GetObject<User>("User");
             if (user != null)
@@ -41,7 +41,8 @@ namespace CRSolutions.Controllers
                         item.antiquity = CompareDates(item.EvaluationDate, DateTime.Now);
                     }
 
-                    return View("Index",await cRSolutionsDBContext.ToListAsync());
+                    //return View("Index",await cRSolutionsDBContext.ToListAsync());
+                    return View("Index", cRSolutionsDBContext);
                 }
                 if (user.IdRol == Guid.Parse("789A3411-ED70-42BD-9681-B0D9AE800583")) //Cliente Admin
                 {
@@ -51,7 +52,8 @@ namespace CRSolutions.Controllers
                     {
                         item.antiquity = CompareDates(item.EvaluationDate, DateTime.Now);
                     }
-                    return View("Index",await cRSolutionsDBContext.ToListAsync());
+                    //return View("Index",await cRSolutionsDBContext.ToListAsync());
+                    return View("Index", cRSolutionsDBContext.ToList());
                 }
                 else
                 {
@@ -211,6 +213,7 @@ namespace CRSolutions.Controllers
                 ViewData["NotFound"] = "CURP no encontrado en la Base de datos";
                 ViewData["IdCompany"] = new SelectList(_context.Companies, "IdCompany", "CompanyName");
                 ViewData["IdUser"] = new SelectList(_context.Users, "IdUser", "FullName");
+                ViewData["disabled"] = false;
                 return View("Create");
             }
 
@@ -226,13 +229,15 @@ namespace CRSolutions.Controllers
                 ViewData["IdCompany"] = new SelectList(_context.Companies, "IdCompany", "CompanyName");
                 ViewData["IdUser"] = new SelectList(_context.Users, "IdUser", "FullName");
 
+                ViewData["disabled"] = false;
                 return View("Create", candidate);
                 //return NotFound();
             }
             else
             {
                 ViewData["NotFound"] = "";
-          
+                ViewData["disabled"] = true;
+
             }
             ViewData["DisabledButton"] = "disabled";
             ViewData["IdCompany"] = new SelectList(_context.Companies, "IdCompany", "CompanyName", candidate.IdCompany);
@@ -242,6 +247,8 @@ namespace CRSolutions.Controllers
 
         [HttpPost]        
         [ValidateAntiForgeryToken]
+        [RequestSizeLimit(10L * 1024L * 1024L * 1024L)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 10L * 1024L * 1024L * 1024L)]
         public async Task<IActionResult> UpdateCandidate(Guid IdCantidate, [Bind("IdCantidate,FullName,EvaluatedPosition,IdRiskScore,EvaluationDate,ReportFile,AudioFile,CreditFile,IdTypeTest,RecordEvaluation,BlackList,Status,IdUser,IdCompany,CURP")] Candidate candidate, IFormFile? ReportFile, IFormFile? CreditFile, IFormFile? AudioFile)
         {
             if (IdCantidate != candidate.IdCantidate)
@@ -385,6 +392,8 @@ namespace CRSolutions.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [RequestSizeLimit(10L * 1024L * 1024L * 1024L)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 10L * 1024L * 1024L * 1024L)]
         public async Task<IActionResult> Create([Bind("IdCantidate,FullName,EvaluatedPosition,IdRiskScore,EvaluationDate,ReportFile,AudioFile,CreditFile,IdTypeTest,RecordEvaluation,BlackList,Status,IdUser,IdCompany,CURP")] Candidate candidate, IFormFile ReportFile, IFormFile CreditFile, IFormFile AudioFile)
         {
 
