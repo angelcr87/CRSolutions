@@ -98,7 +98,7 @@ namespace CRSolutions.Controllers
 
         public IFormFile GetFormFile(Guid id, string typeFile, string file)
         {
-            //typeFile: "audio/mpeg" o  "application/pdf"
+            //typeFile: "audio/mpeg" o  "application/pdf" o "image/jpeg"
             byte[]? FileB = null;
             if (file == "ReportFile")
             {
@@ -111,6 +111,11 @@ namespace CRSolutions.Controllers
                 FileB = FileBytes;
             }
             if (file == "CreditFile")
+            {
+                byte[] FileBytes = _context.Candidates.Find(id).CreditFile;
+                FileB = FileBytes;
+            }
+            if (file == "Photp")
             {
                 byte[] FileBytes = _context.Candidates.Find(id).CreditFile;
                 FileB = FileBytes;
@@ -205,7 +210,7 @@ namespace CRSolutions.Controllers
         }
 
         //GET: Candidates/Edit/ehhfiefhei
-        public async Task<IActionResult> EditCandidate(string? CURP,Guid idCompany)
+        public IActionResult EditCandidate(string? CURP,Guid idCompany)
         {
             if (CURP == null || _context.Candidates == null)
             {
@@ -221,7 +226,7 @@ namespace CRSolutions.Controllers
             //where c.CURP == curp
             //select c) ;
 
-            var candidate = await _context.Candidates.Where(c => c.CURP == CURP && c.IdCompany == idCompany).FirstOrDefaultAsync();
+            var candidate = _context.Candidates.Where(c => c.CURP == CURP && c.IdCompany == idCompany).FirstOrDefault();
 
             if (candidate == null)
             {
@@ -249,7 +254,7 @@ namespace CRSolutions.Controllers
         [ValidateAntiForgeryToken]
         [RequestSizeLimit(10L * 1024L * 1024L * 1024L)]
         [RequestFormLimits(MultipartBodyLengthLimit = 10L * 1024L * 1024L * 1024L)]
-        public async Task<IActionResult> UpdateCandidate(Guid IdCantidate, [Bind("IdCantidate,FullName,EvaluatedPosition,IdRiskScore,EvaluationDate,ReportFile,AudioFile,CreditFile,IdTypeTest,RecordEvaluation,BlackList,Status,IdUser,IdCompany,CURP")] Candidate candidate, IFormFile? ReportFile, IFormFile? CreditFile, IFormFile? AudioFile)
+        public IActionResult UpdateCandidate(Guid IdCantidate, [Bind("IdCantidate,FullName,EvaluatedPosition,IdRiskScore,EvaluationDate,ReportFile,AudioFile,CreditFile,IdTypeTest,RecordEvaluation,BlackList,Status,IdUser,IdCompany,CURP, Photo")] Candidate candidate, IFormFile? ReportFile, IFormFile? CreditFile, IFormFile? AudioFile, IFormFile? Photo)
         {
             if (IdCantidate != candidate.IdCantidate)
             {
@@ -258,7 +263,7 @@ namespace CRSolutions.Controllers
 
             if (ModelState.IsValid)
             {
-                Candidate candidateOriginal = await _context.Candidates.FindAsync(candidate.IdCantidate);
+                Candidate candidateOriginal =  _context.Candidates.Find(candidate.IdCantidate);
                 
                 //Procesamos Audio
                 if (AudioFile != null && AudioFile.Length > 0)
@@ -362,13 +367,48 @@ namespace CRSolutions.Controllers
                     candidate.ReportFile = candidateOriginal.ReportFile;
                 }
 
+                //Procesamos Foto
+                if (Photo != null && Photo.Length > 0)
+                {
+                    try
+                    {
+                        // Leer el archivo de audio en un arreglo de bytes
+                        byte[] bytesFoto;
+                        using (MemoryStream memoryStream = new MemoryStream())
+                        {
+                            Photo.CopyTo(memoryStream);
+                            bytesFoto = memoryStream.ToArray();
+                            candidate.Photo = bytesFoto;
+                        }
+
+                        // Guardar los bytes del audio en la base de datos
+                        // Aquí debes implementar la lógica para guardar el archivo en la base de datos.
+
+                        // Luego, realiza cualquier otra lógica que necesites, como redirigir al usuario a una página de confirmación.
+                        //return RedirectToAction("Confirmacion");
+                    }
+                    catch (Exception ex)
+                    {
+                        // Maneja cualquier excepción que pueda ocurrir al procesar el archivo
+                        ViewBag.Error = "Ocurrió un error al procesar la foto " + ex.Message;
+
+                    }
+                }
+                else
+                {
+                    // En caso de que no se haya proporcionado un archivo válido, puedes manejar el error aquí.
+                    // ViewBag.Error = "Por favor, selecciona un archivo de audio válido.";
+                    candidate.Photo = candidateOriginal.Photo;
+                }
+
                 try
                 {
                    
                    // _context.Entry(candidate).State = EntityState.Modified;
                     //_context.Update(candidate);
                     _context.Entry(candidateOriginal).CurrentValues.SetValues(candidate);
-                    await _context.SaveChangesAsync();
+                     _context.SaveChanges();
+                    ViewBag.Confirmacion = "El Registro ha sido Guardado con Exito";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -394,114 +434,161 @@ namespace CRSolutions.Controllers
         [ValidateAntiForgeryToken]
         [RequestSizeLimit(10L * 1024L * 1024L * 1024L)]
         [RequestFormLimits(MultipartBodyLengthLimit = 10L * 1024L * 1024L * 1024L)]
-        public async Task<IActionResult> Create([Bind("IdCantidate,FullName,EvaluatedPosition,IdRiskScore,EvaluationDate,ReportFile,AudioFile,CreditFile,IdTypeTest,RecordEvaluation,BlackList,Status,IdUser,IdCompany,CURP")] Candidate candidate, IFormFile ReportFile, IFormFile CreditFile, IFormFile AudioFile)
+        public async Task<IActionResult> Create([Bind("FullName,EvaluatedPosition,IdRiskScore,EvaluationDate,ReportFile,AudioFile,CreditFile,IdTypeTest,RecordEvaluation,BlackList,Status,IdUser,IdCompany,CURP,Photo")] Candidate candidate, IFormFile ReportFile, IFormFile CreditFile, IFormFile AudioFile, IFormFile? Photo)
         {
 
             if (ModelState.IsValid)
             {                
                 candidate.IdCantidate = Guid.NewGuid();
 
-
-                //Procesamos Audio
-                if (AudioFile != null && AudioFile.Length > 0)
+                bool validaCurp =  _context.Candidates.Where(c => c.CURP == candidate.CURP).Count() > 0;
+                if (!validaCurp)
                 {
-                    try
+                    //Procesamos Audio
+                    if (AudioFile != null && AudioFile.Length > 0)
                     {
-                        // Leer el archivo de audio en un arreglo de bytes
-                        byte[] bytesDelAudio;
-                        using (MemoryStream memoryStream = new MemoryStream())
+                        try
                         {
-                            AudioFile.CopyTo(memoryStream);
-                            bytesDelAudio = memoryStream.ToArray();
-                            candidate.AudioFile = bytesDelAudio;
+                            // Leer el archivo de audio en un arreglo de bytes
+                            byte[] bytesDelAudio;
+                            using (MemoryStream memoryStream = new MemoryStream())
+                            {
+                                AudioFile.CopyTo(memoryStream);
+                                bytesDelAudio = memoryStream.ToArray();
+                                candidate.AudioFile = bytesDelAudio;
+                            }
+
+                            // Guardar los bytes del audio en la base de datos
+                            // Aquí debes implementar la lógica para guardar el archivo en la base de datos.
+
+                            // Luego, realiza cualquier otra lógica que necesites, como redirigir al usuario a una página de confirmación.
+                            //return RedirectToAction("Confirmacion");
                         }
-
-                        // Guardar los bytes del audio en la base de datos
-                        // Aquí debes implementar la lógica para guardar el archivo en la base de datos.
-
-                        // Luego, realiza cualquier otra lógica que necesites, como redirigir al usuario a una página de confirmación.
-                        //return RedirectToAction("Confirmacion");
+                        catch (Exception ex)
+                        {
+                            // Maneja cualquier excepción que pueda ocurrir al procesar el archivo
+                            ViewBag.Error = "Ocurrió un error al procesar el archivo de audio: " + ex.Message;
+                        }
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        // Maneja cualquier excepción que pueda ocurrir al procesar el archivo
-                        ViewBag.Error = "Ocurrió un error al procesar el archivo de audio: " + ex.Message;
+                        // En caso de que no se haya proporcionado un archivo válido, puedes manejar el error aquí.
+                        ViewBag.Error = "Por favor, selecciona un archivo de audio válido.";
                     }
+
+                    //Procesamos documento de credito
+                    if (CreditFile != null && CreditFile.Length > 0)
+                    {
+                        try
+                        {
+                            // Leer el archivo de audio en un arreglo de bytes
+                            byte[] bytesDelCredito;
+                            using (MemoryStream memoryStream = new MemoryStream())
+                            {
+                                CreditFile.CopyTo(memoryStream);
+                                bytesDelCredito = memoryStream.ToArray();
+                                candidate.CreditFile = bytesDelCredito;
+                            }
+
+                            // Guardar los bytes del audio en la base de datos
+                            // Aquí debes implementar la lógica para guardar el archivo en la base de datos.
+
+                            // Luego, realiza cualquier otra lógica que necesites, como redirigir al usuario a una página de confirmación.
+                            //return RedirectToAction("Confirmacion");
+                        }
+                        catch (Exception ex)
+                        {
+                            // Maneja cualquier excepción que pueda ocurrir al procesar el archivo
+                            ViewBag.Error = "Ocurrió un error al procesar el archivo de audio: " + ex.Message;
+                        }
+                    }
+                    else
+                    {
+                        // En caso de que no se haya proporcionado un archivo válido, puedes manejar el error aquí.
+                        ViewBag.Error = "Por favor, selecciona un archivo de audio válido.";
+                    }
+
+                    //Procesamos documento Reporte
+                    if (ReportFile != null && ReportFile.Length > 0)
+                    {
+                        try
+                        {
+                            // Leer el archivo de audio en un arreglo de bytes
+                            byte[] bytesDelReporte;
+                            using (MemoryStream memoryStream = new MemoryStream())
+                            {
+                                ReportFile.CopyTo(memoryStream);
+                                bytesDelReporte = memoryStream.ToArray();
+                                candidate.ReportFile = bytesDelReporte;
+                            }
+
+                            // Guardar los bytes del audio en la base de datos
+                            // Aquí debes implementar la lógica para guardar el archivo en la base de datos.
+
+                            // Luego, realiza cualquier otra lógica que necesites, como redirigir al usuario a una página de confirmación.
+                            //return RedirectToAction("Confirmacion");
+                        }
+                        catch (Exception ex)
+                        {
+                            // Maneja cualquier excepción que pueda ocurrir al procesar el archivo
+                            ViewBag.Error = "Ocurrió un error al procesar el archivo de audio: " + ex.Message;
+                        }
+                    }
+                    else
+                    {
+                        // En caso de que no se haya proporcionado un archivo válido, puedes manejar el error aquí.
+                        ViewBag.Error = "Por favor, selecciona un archivo de audio válido.";
+                    }
+
+
+                    //Procesamos Foto
+                    if (Photo != null && Photo.Length > 0)
+                    {
+                        try
+                        {
+                            // Leer el archivo de foto en un arreglo de bytes
+                            byte[] bytesFoto;
+                            using (MemoryStream memoryStream = new MemoryStream())
+                            {
+                                Photo.CopyTo(memoryStream);
+                                bytesFoto = memoryStream.ToArray();
+                                candidate.Photo = bytesFoto;
+                            }
+
+                            // Guardar los bytes del audio en la base de datos
+                            // Aquí debes implementar la lógica para guardar el archivo en la base de datos.
+
+                            // Luego, realiza cualquier otra lógica que necesites, como redirigir al usuario a una página de confirmación.
+                            //return RedirectToAction("Confirmacion");
+                        }
+                        catch (Exception ex)
+                        {
+                            // Maneja cualquier excepción que pueda ocurrir al procesar el archivo
+                            ViewBag.Error = "Ocurrió un error al procesar la foto de perfil: " + ex.Message;
+                        }
+                    }
+                    else
+                    {
+                        // En caso de que no se haya proporcionado un archivo válido, puedes manejar el error aquí.
+                        ViewBag.Error = "Por favor, selecciona una foto de perfil";
+                    }
+
+
+                    candidate.Status = true;
+                    _context.Add(candidate);
+                    await _context.SaveChangesAsync();
+                    ViewBag.Confirmacion = "El Registro ha sido Guardado con Exito";
+                    //return RedirectToAction(nameof(Create));
+
                 }
                 else
                 {
-                    // En caso de que no se haya proporcionado un archivo válido, puedes manejar el error aquí.
-                    ViewBag.Error = "Por favor, selecciona un archivo de audio válido.";
+                    candidate.IdCantidate = Guid.Parse("00000000-0000-0000-0000-000000000000");
+                    ViewBag.NotFound = "CURP Existente";
+                    ViewData["IdCompany"] = new SelectList(_context.Companies, "IdCompany", "CompanyName", candidate.IdCompany);
+                    ViewData["IdUser"] = new SelectList(_context.Users, "IdUser", "FullName", candidate.IdUser);
+                    return View(candidate);
                 }
-
-                //Procesamos documento de credito
-                if (CreditFile != null && CreditFile.Length > 0)
-                {
-                    try
-                    {
-                        // Leer el archivo de audio en un arreglo de bytes
-                        byte[] bytesDelCredito;
-                        using (MemoryStream memoryStream = new MemoryStream())
-                        {
-                            CreditFile.CopyTo(memoryStream);
-                            bytesDelCredito = memoryStream.ToArray();
-                            candidate.CreditFile = bytesDelCredito;
-                        }
-
-                        // Guardar los bytes del audio en la base de datos
-                        // Aquí debes implementar la lógica para guardar el archivo en la base de datos.
-
-                        // Luego, realiza cualquier otra lógica que necesites, como redirigir al usuario a una página de confirmación.
-                        //return RedirectToAction("Confirmacion");
-                    }
-                    catch (Exception ex)
-                    {
-                        // Maneja cualquier excepción que pueda ocurrir al procesar el archivo
-                        ViewBag.Error = "Ocurrió un error al procesar el archivo de audio: " + ex.Message;
-                    }
-                }
-                else
-                {
-                    // En caso de que no se haya proporcionado un archivo válido, puedes manejar el error aquí.
-                    ViewBag.Error = "Por favor, selecciona un archivo de audio válido.";
-                }
-
-                //Procesamos documento Reporte
-                if (ReportFile != null && ReportFile.Length > 0)
-                {
-                    try
-                    {
-                        // Leer el archivo de audio en un arreglo de bytes
-                        byte[] bytesDelReporte;
-                        using (MemoryStream memoryStream = new MemoryStream())
-                        {
-                            ReportFile.CopyTo(memoryStream);
-                            bytesDelReporte = memoryStream.ToArray();
-                            candidate.ReportFile = bytesDelReporte;
-                        }
-
-                        // Guardar los bytes del audio en la base de datos
-                        // Aquí debes implementar la lógica para guardar el archivo en la base de datos.
-
-                        // Luego, realiza cualquier otra lógica que necesites, como redirigir al usuario a una página de confirmación.
-                        //return RedirectToAction("Confirmacion");
-                    }
-                    catch (Exception ex)
-                    {
-                        // Maneja cualquier excepción que pueda ocurrir al procesar el archivo
-                        ViewBag.Error = "Ocurrió un error al procesar el archivo de audio: " + ex.Message;
-                    }
-                }
-                else
-                {
-                    // En caso de que no se haya proporcionado un archivo válido, puedes manejar el error aquí.
-                    ViewBag.Error = "Por favor, selecciona un archivo de audio válido.";
-                }
-
-                candidate.Status = true;
-                _context.Add(candidate);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Create));
             }
             ViewData["IdCompany"] = new SelectList(_context.Companies, "IdCompany", "CompanyName", candidate.IdCompany);
             ViewData["IdUser"] = new SelectList(_context.Users, "IdUser", "FullName", candidate.IdUser);

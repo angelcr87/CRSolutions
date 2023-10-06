@@ -18,7 +18,7 @@ namespace CRSolutions.Models
 
         [Required]
         [Column(TypeName = "VARCHAR(300)")]
-        [StringLength(300)]
+        [StringLength(18)]
         public string? CURP { get; set; }
 
         //[Required]
@@ -76,6 +76,8 @@ namespace CRSolutions.Models
 
         [Display(Name = "Empresa")]
         public Guid IdCompany { get; set; }
+
+        public byte[]? Photo { get; set; }
 
         [NotMapped]
         public string? antiquity { get; set; }

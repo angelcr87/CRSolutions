@@ -4,6 +4,7 @@ using CRSolutions.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CRSolutions.Migrations
 {
     [DbContext(typeof(CRSolutionsDBContext))]
-    partial class CRSolutionsDBContextModelSnapshot : ModelSnapshot
+    [Migration("20231003055500_000002_Add_Property_photo_Candidate")]
+    partial class _000002_Add_Property_photo_Candidate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

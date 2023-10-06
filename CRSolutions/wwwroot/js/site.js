@@ -28,11 +28,22 @@
                }
                else {
                    $('#Create').removeAttr('disable')
-               }
-
-               
+               }             
 
            }); 
 
+           $("#limpiar").click(function () {
+               $("input[type=text], input[type=file] ,textarea, input[type=datetime-local],#datalistOptions2, #IdRiskScore").val("");
+               $('input[type="radio"]').prop('checked', false);
+           });
+
+
+           //validar campos 
+
        });
+           
+
+
+
+     
 

@@ -50,13 +50,14 @@
 </div> *@
 <div class="separador"></div>
 <div class="container">
+    <form asp-action="Create" enctype="multipart/form-data">
     <div class="row">
         <div class="col-md-6">
             <div class="row">
                 <div class="col-md-2"></div>
                 <div class="col-md-4">                   
                     <div class="file-select" id="src-file1">
-                        <input type="file" name="src-file1" aria-label="Archivo" />
+                            <input type="file" asp-for="Photo" name="Photo" accept="image/*" aria-label="Archivo" />
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -67,8 +68,27 @@
             <br />
 
             <div class="card centrando" style="width: 18rem">
-                <img src="~/images/avatar.png" class="card-img-top" alt="img-thumbnail" />
-            </div>
+           @*      <img src="~/images/avatar.png" class="card-img-top" alt="img-thumbnail" /> *@
+                    @{                       
+                        if (Model == null)
+                        {
+                            <img src="~/images/avatar.png" class="card-img-top" alt="img-thumbnail" />
+                        }
+                        else
+                        {
+                            if(Model.Photo == null)
+                            {
+                                <img src="~/images/avatar.png" class="card-img-top" alt="img-thumbnail" />
+                            }
+                            else
+                            {
+                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Photo)" class="card-img-top" alt="img-thumbnail" />
+                            }
+                            
+                        }
+                    }
+                    
+                </div>
             <br>
             <div class="row">
                 <div class="col-md-2"></div>
@@ -88,9 +108,13 @@
     
             <div class="col-md-6">
                 <div class="container">
-                <form asp-action="Create" enctype="multipart/form-data">
+                
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" asp-for="IdCantidate" />
+                    
+                        <input type="hidden" asp-for="IdCantidate" />
+                        <span style="color:green; font-size:2rem;">@ViewBag.Confirmacion</span>
+
+
                     <div class="row">      
                         <div class="col-md-12">
                             <div class="mb-3">
@@ -104,9 +128,13 @@
                             <div class="mb-3">
                                 <label asp-for="CURP" class="form-label"></label>
                                 <input asp-for="CURP"  class="form-control" />                                
+@*                                 <button formnovalidate onclick="enviarPeticion()" formaction="@Url.Action("EditCandidate","Candidates")" class="btn botones form-control"><i class="fa-solid fa-magnifying-glass"></i></button> *@
                                 <button formnovalidate onclick="enviarPeticion()" formaction="@Url.Action("EditCandidate","Candidates")" class="btn botones form-control"><i class="fa-solid fa-magnifying-glass"></i></button>
                                 <span asp-validation-for="CURP" class="text-danger"></span>
+                                
                                 <span style="color:red;">@ViewBag.NotFound</span>
+                           
+                                
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -136,7 +164,7 @@
                             <div class="mb-3">
                                 <label asp-for="ReportFile" class="form-label"></label>                               
                                 <div class="reporte" id="src-file2">
-                                    <input asp-for="ReportFile" type="file" class="form-control" />
+                                    <input asp-for="ReportFile" type="file" class="form-control" accept="application/pdf"  />
                                 </div>
                                 <span asp-validation-for="ReportFile" class="text-danger"></span>
                                 @* <label asp-for="ReportFile" class="form-label"></label> *@
@@ -173,7 +201,7 @@
                                 <label asp-for="AudioFile" class="form-label"></label>
                                 @* <input asp-for="AudioFile" class="form-control" /> *@
                                 <div class="reporte" id="src-file2">
-                                    <input asp-for="AudioFile"  type="file" class="form-control" />
+                                    <input asp-for="AudioFile" type="file" class="form-control" accept=".mp3,audio/*" />
                                 </div>
                                 <span asp-validation-for="AudioFile" class="text-danger"></span>
                             </div>
@@ -187,7 +215,7 @@
                                 <label asp-for="CreditFile" class="form-label"></label>
                                 @* <input asp-for="CreditFile" class="form-control" /> *@
                                 <div class="reporte" id="src-file2">
-                                    <input asp-for="CreditFile" type="file" class="form-control" />
+                                    <input asp-for="CreditFile" type="file" class="form-control" accept="application/pdf"  />
                                 </div>
                                 <span asp-validation-for="CreditFile" class="text-danger"></span>
                             </div>
@@ -272,18 +300,53 @@
 
                     <div class="row">
                         <div class="col-lg-3 col-md-6 col-sm-6">
-                            <div class="mb-3">                                
-                                <button asp-action="Create" id="Create" class="btn botones-green form-control" >Registrar</button>                                 
+                            <div class="mb-3">  
+                                @{
+                                    if (Model == null)
+                                    {
+                                        <button asp-action="Create" id="Create" class="btn botones-green form-control">Registrar</button>                                       
+                                    }
+                                    else
+                                    {
+                                        if (Model.IdCantidate ==  Guid.Parse("00000000-0000-0000-0000-000000000000"))
+                                        {
+                                            <button asp-action="Create" id="Create" class="btn botones-green form-control">Registrar</button>
+                                        }
+                                        else
+                                        {
+                                            <button asp-action="Create" disabled id="Create" class="btn botones-green form-control">Registrar</button>
+                                        }
+                                    }
+                                }
+                                                               
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6 col-sm-6">
                             <div class="mb-3">
-                                <button formnovalidate formmethod="post" formaction="@Url.Action("UpdateCandidate","Candidates")" class="btn botones form-control">Modificar</button>
+                                @{
+                                    if(Model == null)
+                                    {                                        
+                                        <button formnovalidate disabled formmethod="post" formaction="@Url.Action("UpdateCandidate","Candidates")" class="btn botones form-control">Modificar</button>
+                                    }
+                                    else
+                                    {
+                                        if (Model.IdCantidate == Guid.Parse("00000000-0000-0000-0000-000000000000"))
+                                        {
+                                            <button formnovalidate disabled formmethod="post" formaction="@Url.Action("UpdateCandidate","Candidates")" class="btn botones form-control">Modificar</button>
+                                        }
+                                        else
+                                        {
+                                            <button formnovalidate formmethod="post" formaction="@Url.Action("UpdateCandidate","Candidates")" class="btn botones form-control">Modificar</button>
+                                        }
+                                       
+                                    }
+                                }
+                               
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6 col-sm-6">
                             <div class="mb-3">
-                                <button class="btn botones-gold form-control">Nuevo</button>
+                                <button class="btn botones-gold form-control" id="limpiar">Nuevo</button>
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6 col-sm-6">
@@ -292,34 +355,13 @@
                             </div>
                         </div>
                     </div>
-        </form>
+        
                 </div>
             </div>        
     </div>
+    </form>
 </div>
 
-@* <script>
-    document.getElementById("CURP").addEventListener("blur", function () {
-        // Obtén el valor del input
-        var valorInput = this.value;
-
-        // Realiza una solicitud AJAX al controlador
-        $.ajax({
-            url: '@Url.Action("EditCandidate", "Candidates")', // Reemplaza "TuAccion" y "TuControlador" con los valores correctos
-            method: 'GET', // Puedes usar 'GET' o 'POST' según tus necesidades
-            data: { CURP: valorInput }, // Envía el valor del input como parámetro
-            success: function (result) {
-                // Maneja la respuesta del controlador (si es necesario)
-                console.log(result);
-                 
-            },
-            error: function () {
-                // Maneja cualquier error que pueda ocurrir durante la solicitud AJAX
-                console.error("Error en la solicitud AJAX");
-            }
-        });
-    });
-</script> *@
 <script>
     function DisabledButtonCreate() {
     
@@ -336,115 +378,9 @@
 
     }
 
-    $(".target").on("change", function () {
-        alert("Handler for `change` called.");
-    });
-
-  
-
-    // function enviarPeticion() {
-    //     fetch('@Url.Action("EditCandidate","Candidates")')
-    //         .then(response => {
-    //             if (!response.ok) {
-    //                 throw new Error('Network response was not ok');
-    //             }
-    //             return response.json();
-    //         })
-    //         .then(data => {
-    //             DisabledButtonCreate(); // Llama a tu función aquí
-    //         })
-    //         .catch(error => {
-    //             console.error('There has been a problem with your fetch operation:', error);
-    //         });
-    // }
-    
-
 </script>
 
 
-@* 
-
-<h1>Create</h1>
-
-<h4>Candidate</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="FullName" class="control-label"></label>
-                <input asp-for="FullName" class="form-control" />
-                <span asp-validation-for="FullName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EvaluatedPosition" class="control-label"></label>
-                <input asp-for="EvaluatedPosition" class="form-control" />
-                <span asp-validation-for="EvaluatedPosition" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdRiskScore" class="control-label"></label>
-                <input asp-for="IdRiskScore" class="form-control" />
-                <span asp-validation-for="IdRiskScore" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EvaluationDate" class="control-label"></label>
-                <input asp-for="EvaluationDate" class="form-control" />
-                <span asp-validation-for="EvaluationDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ReportFile" class="control-label"></label>
-                <input asp-for="ReportFile" class="form-control" />
-                <span asp-validation-for="ReportFile" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AudioFile" class="control-label"></label>
-                <input asp-for="AudioFile" class="form-control" />
-                <span asp-validation-for="AudioFile" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PhotoFile" class="control-label"></label>
-                <input asp-for="PhotoFile" class="form-control" />
-                <span asp-validation-for="PhotoFile" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdTypeTest" class="control-label"></label>
-                <input asp-for="IdTypeTest" class="form-control" />
-                <span asp-validation-for="IdTypeTest" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RecordEvaluation" class="control-label"></label>
-                <input asp-for="RecordEvaluation" class="form-control" />
-                <span asp-validation-for="RecordEvaluation" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BlackList" class="control-label"></label>
-                <input asp-for="BlackList" class="form-control" />
-                <span asp-validation-for="BlackList" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Status" /> @Html.DisplayNameFor(model => model.Status)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdUser" class="control-label"></label>
-                <select asp-for="IdUser" class ="form-control" asp-items="ViewBag.IdUser"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdCompany" class="control-label"></label>
-                <select asp-for="IdCompany" class ="form-control" asp-items="ViewBag.IdCompany"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div> *@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
