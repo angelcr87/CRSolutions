@@ -35,7 +35,7 @@ namespace CRSolutions.Controllers
                 if (user.IdRol == Guid.Parse("882E1047-29E1-4276-8BCE-6F2372670AE1")) //Cliente
                 {
 
-                    var cRSolutionsDBContext = _context.Candidates.Where(c => c.IdUser==user.IdUser).Include(c => c.Company).Include(c => c.User);
+                    var cRSolutionsDBContext = _context.Candidates.Where(c => c.IdUser==user.IdUser).OrderByDescending(c => c.EvaluationDate).Include(c => c.Company).Include(c => c.User);
                     foreach (var item in cRSolutionsDBContext)
                     {
                         item.antiquity = CompareDates(item.EvaluationDate, DateTime.Now);
@@ -47,7 +47,7 @@ namespace CRSolutions.Controllers
                 if (user.IdRol == Guid.Parse("789A3411-ED70-42BD-9681-B0D9AE800583")) //Cliente Admin
                 {
 
-                    var cRSolutionsDBContext = _context.Candidates.Include(c => c.Company).Include(c => c.User);
+                    var cRSolutionsDBContext = _context.Candidates.Include(c => c.Company).Where(c => c.IdCompany == user.IdCompany).OrderByDescending(c => c.EvaluationDate).Include(c => c.User);
                     foreach (var item in cRSolutionsDBContext)
                     {
                         item.antiquity = CompareDates(item.EvaluationDate, DateTime.Now);
