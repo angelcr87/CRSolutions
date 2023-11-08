@@ -47,16 +47,19 @@
                 @{
                     if (usuario.IdRol == Guid.Parse("789A3411-ED70-42BD-9681-B0D9AE800583")) // Rol de Cliente Administrador
                     {
-                        var user_Recent = Model.OrderByDescending(c => c.EvaluationDate).Where(c => c.CreditFile != null).FirstOrDefault().IdCantidate;
+                        if(Model.Count() > 0)
+                        {
+                            var user_Recent = Model.OrderByDescending(c => c.EvaluationDate).Where(c => c.CreditFile != null).FirstOrDefault().IdCantidate;
 
-                        @* <input type="button" formaction="@Url.Action("GetFile","Candidates", new{ id = user_Recent, typeFile="application/pdf", file="CreditFile" })" value="Creditos" class="boton-menu"> *@
-                        <div class="col-md-2" style="margin:auto;">
-                            <a target="_blank" href="@Url.Action("GetFile","Candidates", new{ id = user_Recent, typeFile="application/pdf", file="CreditFile" })">
-                                <div class="alinea-botones btn-credito">
-                                Creditos                            
-                                </div>
-                            </a>
-                        </div>
+                            @* <input type="button" formaction="@Url.Action("GetFile","Candidates", new{ id = user_Recent, typeFile="application/pdf", file="CreditFile" })" value="Creditos" class="boton-menu"> *@
+                            <div class="col-md-2" style="margin:auto;">
+                                <a target="_blank" href="@Url.Action("GetFile","Candidates", new{ id = user_Recent, typeFile="application/pdf", file="CreditFile" })">
+                                    <div class="alinea-botones btn-credito">
+                                    Creditos                            
+                                    </div>
+                                </a>
+                            </div>
+                        }
                     }
                 }            
 
@@ -87,7 +90,7 @@
 
 <div class="separador"></div>
 
-<div class="encabezado">Clientes</div>
+<div class="encabezado">@ViewBag.Company</div>
 <div class="container">
     <div class="row">
         <div class="col-md-12">

@@ -52,31 +52,52 @@ namespace CRSolutions.Controllers
         //}
 
         // GET: Users/Create
-        //public IActionResult Create()
-        //{
-        //    ViewData["IdCompany"] = new SelectList(_context.Companies, "IdCompany", "CompanyName");
-        //    ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "RoleName");
-        //    return View();
-        //}
+        public IActionResult Create()
+        {
+            User user = HttpContext.Session.GetObject<User>("User");
+            if (user != null)
+            {
+                if (user.IdRol == Guid.Parse("4A74DA66-BCD1-4662-8625-CB7C3BF2A837")) //Admin
+                {
+                    ViewData["IdCompany"] = new SelectList(_context.Companies, "IdCompany", "CompanyName");
+                    ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "RoleName");
+                    return View();
+                }
+                else
+                {
+                    return Unauthorized();
+                    //return RedirectToAction("Login", "Users");
+                }
+            }
+            else
+            {
+                return Unauthorized();
+            }
 
-        // POST: Users/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("IdUser,FullName,UserName,Password,Status,IdRol,IdCompany")] User user)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        user.IdUser = Guid.NewGuid();
-        //        _context.Add(user);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["IdCompany"] = new SelectList(_context.Companies, "IdCompany", "CompanyName", user.IdCompany);
-        //    ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "RoleName", user.IdRol);
-        //    return View(user);
-        //}
+
+        }
+
+        //POST: Users/Create
+        //To protect from overposting attacks, enable the specific properties you want to bind to.
+        //For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+       [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("IdUser,FullName,UserName,Password,IdRol,IdCompany")] User user)
+        {
+            //if (ModelState.IsValid)
+            //{
+                user.Status = true;
+                user.Password = Encrypt(user.Password);
+                user.IdUser = Guid.NewGuid();
+                _context.Add(user);
+                await _context.SaveChangesAsync();
+                return View("Login");
+            //}
+            ViewData["IdCompany"] = new SelectList(_context.Companies, "IdCompany", "CompanyName", user.IdCompany);
+            ViewData["IdRol"] = new SelectList(_context.Roles, "IdRol", "RoleName", user.IdRol);
+            return View("Login");
+        }
 
         // GET: Users/Edit/5
         //public async Task<IActionResult> Edit(Guid? id)
@@ -167,7 +188,7 @@ namespace CRSolutions.Controllers
         //    {
         //        _context.Users.Remove(user);
         //    }
-            
+
         //    await _context.SaveChangesAsync();
         //    return RedirectToAction(nameof(Index));
         //}

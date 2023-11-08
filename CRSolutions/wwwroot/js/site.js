@@ -33,8 +33,11 @@
            }); 
 
            $("#limpiar").click(function () {
-               $("input[type=text], input[type=file] ,textarea, input[type=datetime-local],#datalistOptions2, #IdRiskScore").val("");
+               $("input[type=text], input[type=file] ,textarea, input[type=datetime-local],#datalistOptions2, #IdRiskScore, #IdCantidate").val("");
                $('input[type="radio"]').prop('checked', false);
+
+               DisabledButtonCreate();
+
            });
 
 

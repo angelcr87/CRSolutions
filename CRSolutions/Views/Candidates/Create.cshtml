@@ -72,17 +72,17 @@
                     @{                       
                         if (Model == null)
                         {
-                            <img src="~/images/avatar.png" class="card-img-top" alt="img-thumbnail" />
+                                <img src="~/images/avatar.png" class="card-img-top" alt="img-thumbnail" />
                         }
                         else
                         {
                             if(Model.Photo == null)
                             {
-                                <img src="~/images/avatar.png" class="card-img-top" alt="img-thumbnail" />
+                                    <img src="~/images/avatar.png" class="card-img-top" alt="img-thumbnail" />
                             }
                             else
                             {
-                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Photo)" class="card-img-top" alt="img-thumbnail" />
+                                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Photo)" class="card-img-top" alt="img-thumbnail" />
                             }
                             
                         }
@@ -304,17 +304,17 @@
                                 @{
                                     if (Model == null)
                                     {
-                                        <button asp-action="Create" id="Create" class="btn botones-green form-control">Registrar</button>                                       
+                                            <button asp-action="Create" id="Create" class="btn botones-green form-control">Registrar</button>                                       
                                     }
                                     else
                                     {
                                         if (Model.IdCantidate ==  Guid.Parse("00000000-0000-0000-0000-000000000000"))
                                         {
-                                            <button asp-action="Create" id="Create" class="btn botones-green form-control">Registrar</button>
+                                                <button asp-action="Create" id="Create" class="btn botones-green form-control">Registrar</button>
                                         }
                                         else
                                         {
-                                            <button asp-action="Create" disabled id="Create" class="btn botones-green form-control">Registrar</button>
+                                                <button asp-action="Create" disabled id="Create" class="btn botones-green form-control">Registrar</button>
                                         }
                                     }
                                 }
@@ -326,17 +326,17 @@
                                 @{
                                     if(Model == null)
                                     {                                        
-                                        <button formnovalidate disabled formmethod="post" formaction="@Url.Action("UpdateCandidate","Candidates")" class="btn botones form-control">Modificar</button>
+                                            <button id="Modified" formnovalidate disabled formmethod="post" formaction="@Url.Action("UpdateCandidate","Candidates")"  class="btn botones form-control">Modificar</button>
                                     }
                                     else
                                     {
                                         if (Model.IdCantidate == Guid.Parse("00000000-0000-0000-0000-000000000000"))
                                         {
-                                            <button formnovalidate disabled formmethod="post" formaction="@Url.Action("UpdateCandidate","Candidates")" class="btn botones form-control">Modificar</button>
+                                            <button id="Modified" formnovalidate disabled formmethod="post" formaction="@Url.Action("UpdateCandidate","Candidates")" class="btn botones form-control">Modificar</button>
                                         }
                                         else
                                         {
-                                            <button formnovalidate formmethod="post" formaction="@Url.Action("UpdateCandidate","Candidates")" class="btn botones form-control">Modificar</button>
+                                            <button id="Modified" formnovalidate formmethod="post" formaction="@Url.Action("UpdateCandidate","Candidates")" class="btn botones form-control">Modificar</button>
                                         }
                                        
                                     }
@@ -367,13 +367,16 @@
     
         var idCandidate = document.getElementById("IdCantidate");
         var button = document.getElementById("Create");
+        var buttonModified = document.getElementById("Modified");
         //var model = @Model
         if (idCandidate != null || idCandidate.value != "") {
             // Si el modelo no es null y someProperty no es una cadena vacía, habilita el botón
             button.disabled = false;
+            buttonModified.disabled = true;
         } else {
             // De lo contrario, deshabilita el botón
             button.disabled = true;
+            buttonModified.disabled = false;
         }
 
     }

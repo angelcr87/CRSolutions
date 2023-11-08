@@ -42,8 +42,11 @@ namespace CRSolutions.Controllers
                     }
 
                     //return View("Index",await cRSolutionsDBContext.ToListAsync());
+                    var company = _context.Companies.Find(user.IdCompany).CompanyName;
+                    ViewBag.Company = company;
                     return View("Index", cRSolutionsDBContext);
                 }
+                
                 if (user.IdRol == Guid.Parse("789A3411-ED70-42BD-9681-B0D9AE800583")) //Cliente Admin
                 {
 
@@ -53,6 +56,8 @@ namespace CRSolutions.Controllers
                         item.antiquity = CompareDates(item.EvaluationDate, DateTime.Now);
                     }
                     //return View("Index",await cRSolutionsDBContext.ToListAsync());
+                    var company = _context.Companies.Find(user.IdCompany).CompanyName;
+                    ViewBag.Company = company;
                     return View("Index", cRSolutionsDBContext.ToList());
                 }
                 else
@@ -189,6 +194,7 @@ namespace CRSolutions.Controllers
             {
                 if (user.IdRol == Guid.Parse("4A74DA66-BCD1-4662-8625-CB7C3BF2A837")) //Admin
                 {
+
                     ViewData["IdCompany"] = new SelectList(_context.Companies, "IdCompany", "CompanyName");
                     ViewData["IdUser"] = new SelectList(_context.Users, "IdUser", "FullName");
                     return View();
